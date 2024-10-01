@@ -55,7 +55,7 @@
         <!-- Reactive Form -->
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8">
           <!-- Name -->
-          <div class="mb-4">
+          <div class="mb-4 relative">
             <input
               id="name"
               formControlName="name"
@@ -68,14 +68,14 @@
                 registerForm.get('name')?.invalid &&
                 registerForm.get('name')?.touched
               "
-              class="text-red-500 text-sm"
+              class="text-red-500 text-xs absolute bottom-1 right-2"
             >
               Name is required.
             </div>
           </div>
 
           <!-- Username -->
-          <div class="mb-4">
+          <div class="mb-4 relative">
             <input
               id="username"
               formControlName="username"
@@ -88,14 +88,14 @@
                 registerForm.get('username')?.invalid &&
                 registerForm.get('username')?.touched
               "
-              class="text-red-500 text-sm"
+              class="text-red-500 text-xs absolute bottom-1 right-2"
             >
               Username is required.
             </div>
           </div>
 
           <!-- Email -->
-          <div class="mb-4">
+          <div class="mb-4 relative">
             <input
               id="email"
               formControlName="email"
@@ -108,14 +108,14 @@
                 registerForm.get('email')?.invalid &&
                 registerForm.get('email')?.touched
               "
-              class="text-red-500 text-sm"
+              class="text-red-500 text-xs absolute bottom-1 right-2"
             >
               Valid email is required.
             </div>
           </div>
 
           <!-- Password -->
-          <div class="mb-4">
+          <div class="mb-4 relative">
             <input
               id="password"
               formControlName="password"
@@ -128,14 +128,14 @@
                 registerForm.get('password')?.invalid &&
                 registerForm.get('password')?.touched
               "
-              class="text-red-500 text-sm"
+              class="text-red-500 text-xs absolute bottom-1 right-2"
             >
               Password is required (min 8 characters).
             </div>
           </div>
 
           <!-- Confirm Password -->
-          <div class="mb-4">
+          <div class="mb-4 relative">
             <input
               id="confirmPassword"
               formControlName="confirmPassword"
@@ -148,7 +148,7 @@
                 registerForm.get('confirmPassword')?.invalid &&
                 registerForm.get('confirmPassword')?.touched
               "
-              class="text-red-500 text-sm"
+              class="text-red-500 text-xs absolute bottom-1 right-2"
             >
               Passwords must match.
             </div>
@@ -157,17 +157,22 @@
           <!-- Submit Button -->
           <button
             type="submit"
-            [disabled]="registerForm.invalid"
+            [disabled]="registerForm.invalid || isSubmitting"
             class="w-full bg-red-400 text-white py-5 rounded-2xl hover:bg-red-500 transition duration-300 ease-out cursor-pointer mt-4"
           >
             Register
           </button>
           <p class="mt-4 px-4">
             Already have an account?
-            <a href="/login" class="text-red-500">Login</a>
+            <a href="/login" class="text-red-500 font-medium">Sign-in</a>
           </p>
         </form>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Error Message Display -->
+<div *ngIf="errorMessage" class="text-red-500 text-center my-4 font-semibold">
+  {{ errorMessage }}
 </div>

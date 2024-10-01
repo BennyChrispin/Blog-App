@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["Buletin", "Merriweather", "ngsw", "Roboto"]
+  "cSpell.words": [
+    "Buletin",
+    "Firestore",
+    "Merriweather",
+    "ngsw",
+    "Roboto",
+    "Toastr"
+  ]
 }
