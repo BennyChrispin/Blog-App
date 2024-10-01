@@ -1,1 +1,173 @@
-<p>register works!</p>
+<div class="flex items-center justify-center">
+  <div class="container">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-center">
+      <!-- Left Side Image (Hidden on mobile) -->
+      <div class="hidden lg:block lg:col-span-1 text-center">
+        <img
+          src="assets/logo.svg"
+          alt="Register Image"
+          class="w-3/5 h-auto mx-auto"
+        />
+        <p class="text-black text-2xl font-medium">
+          <span class="text-red-500 font-bold">Buletin</span> is a platform for
+          <br />
+          sharing stories and connecting
+          <br />
+          with other people.
+        </p>
+      </div>
+
+      <!-- Right Side Register Form -->
+      <div class="p-8 lg:col-span-2 w-full max-w-screen-md mx-auto mt-24">
+        <h2 class="text-2xl font-bold mb-4 text-start">Create Account</h2>
+
+        <!-- Sign Up Buttons -->
+        <div class="flex space-x-5 items-center w-full mt-10">
+          <button
+            class="flex gap-4 items-center justify-center p-4 border border-gray-400 rounded-xl w-full hover:border-2 hover:border-gray-600 duration-300 transition-all ease-in-out"
+          >
+            <img
+              src="../../../assets/Google__G__logo.svg.png"
+              alt="Google Logo"
+              class="w-8 h-8 object-cover"
+            />
+            Sign up with Google
+          </button>
+          <button
+            class="flex gap-4 items-center justify-center p-4 border border-gray-400 rounded-xl w-full hover:border-2 hover:border-gray-600 duration-300 transition-all ease-in-out"
+          >
+            <img
+              src="../../../assets/apple-logo-transparent.png"
+              alt="Apple Logo"
+              class="w-8 h-8 object-cover"
+            />
+            Sign up with Apple
+          </button>
+        </div>
+
+        <!-- Centered 'or' Line -->
+        <div class="flex items-center mt-14">
+          <div class="w-full h-0.5 bg-gray-200"></div>
+          <p class="mx-4 text-gray-600 font-bold">OR</p>
+          <div class="w-full h-0.5 bg-gray-200"></div>
+        </div>
+
+        <!-- Reactive Form -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8">
+          <!-- Name -->
+          <div class="mb-4">
+            <input
+              id="name"
+              formControlName="name"
+              class="w-full px-4 py-4 border-b border-gray-700 outline-none focus:border-b-2 focus:border-red-500 duration-300 transition-all ease-out"
+              type="text"
+              placeholder="Full Name"
+            />
+            <div
+              *ngIf="
+                registerForm.get('name')?.invalid &&
+                registerForm.get('name')?.touched
+              "
+              class="text-red-500 text-sm"
+            >
+              Name is required.
+            </div>
+          </div>
+
+          <!-- Username -->
+          <div class="mb-4">
+            <input
+              id="username"
+              formControlName="username"
+              class="w-full px-4 py-4 border-b border-gray-700 outline-none focus:border-b-2 focus:border-red-500 duration-300 transition-all ease-out"
+              type="text"
+              placeholder="Username"
+            />
+            <div
+              *ngIf="
+                registerForm.get('username')?.invalid &&
+                registerForm.get('username')?.touched
+              "
+              class="text-red-500 text-sm"
+            >
+              Username is required.
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="mb-4">
+            <input
+              id="email"
+              formControlName="email"
+              class="w-full px-4 py-4 border-b border-gray-700 outline-none focus:border-b-2 focus:border-red-600 duration-300 transition-all ease-out"
+              type="email"
+              placeholder="Email Address"
+            />
+            <div
+              *ngIf="
+                registerForm.get('email')?.invalid &&
+                registerForm.get('email')?.touched
+              "
+              class="text-red-500 text-sm"
+            >
+              Valid email is required.
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-4">
+            <input
+              id="password"
+              formControlName="password"
+              class="w-full px-4 py-4 border-b border-gray-700 outline-none focus:border-b-2 focus:border-red-600 duration-300 transition-all ease-out"
+              type="password"
+              placeholder="Password"
+            />
+            <div
+              *ngIf="
+                registerForm.get('password')?.invalid &&
+                registerForm.get('password')?.touched
+              "
+              class="text-red-500 text-sm"
+            >
+              Password is required (min 8 characters).
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-4">
+            <input
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              class="w-full px-4 py-4 border-b border-gray-700 outline-none focus:border-b-2 focus:border-red-600 duration-300 transition-all ease-out"
+              type="password"
+              placeholder="Confirm your password"
+            />
+            <div
+              *ngIf="
+                registerForm.get('confirmPassword')?.invalid &&
+                registerForm.get('confirmPassword')?.touched
+              "
+              class="text-red-500 text-sm"
+            >
+              Passwords must match.
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            [disabled]="registerForm.invalid"
+            class="w-full bg-red-400 text-white py-5 rounded-2xl hover:bg-red-600 transition duration-300 ease-out cursor-pointer mt-4"
+          >
+            Register
+          </button>
+          <p class="mt-4 px-4">
+            Already have an account?
+            <a href="/login" class="text-red-500">Login</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
