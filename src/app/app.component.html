@@ -1,10 +1,11 @@
-<div class="w-full min-h-screen">
+<div class="flex flex-col min-h-screen">
   <app-header *ngIf="isBlogRoute()"></app-header>
 
-  <app-login *ngIf="isLoginRoute()"></app-login>
-  <app-register *ngIf="isRegisterRoute()"></app-register>
-
-  <router-outlet *ngIf="isBlogRoute()"></router-outlet>
+  <main class="flex-grow">
+    <app-login *ngIf="isLoginRoute()"></app-login>
+    <app-register *ngIf="isRegisterRoute()"></app-register>
+    <router-outlet *ngIf="isBlogRoute()"></router-outlet>
+  </main>
 
   <app-footer *ngIf="isBlogRoute()"></app-footer>
 </div>
