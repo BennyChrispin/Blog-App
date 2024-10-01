@@ -3,8 +3,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-blog-list',
   templateUrl: './blog-list.component.html',
-  styleUrl: './blog-list.component.css'
+  styleUrl: './blog-list.component.css',
 })
-export class BlogListComponent {
-
-}
+export class BlogListComponent {}

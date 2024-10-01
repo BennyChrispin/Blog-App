@@ -5,8 +5,7 @@ import { BlogDetailComponent } from './blog-detail/blog-detail.component';
 import { BlogCreateComponent } from './blog-create/blog-create.component';
 import { BlogEditComponent } from './blog-edit/blog-edit.component';
 import { CommentSectionComponent } from './comment-section/comment-section.component';
-
-
+import { BannerComponent } from './banner/banner.component';
 
 @NgModule({
   declarations: [
@@ -14,10 +13,9 @@ import { CommentSectionComponent } from './comment-section/comment-section.compo
     BlogDetailComponent,
     BlogCreateComponent,
     BlogEditComponent,
-    CommentSectionComponent
+    CommentSectionComponent,
+    BannerComponent,
   ],
-  imports: [
-    CommonModule
-  ]
+  imports: [CommonModule],
 })
-export class BlogModule { }
+export class BlogModule {}
