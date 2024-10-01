@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
         (user) => {
           console.log('Login successful', user);
           // Redirect to the blog component after successful login
-          this.router.navigate(['/blog']);
+          this.router.navigate(['/blogs']);
         },
         (error) => {
           console.error('Login error:', error);

@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
         (user) => {
           this.isSubmitting = false;
           this.showToast('Registration successful!', 'success');
-          this.router.navigate(['/blog']);
+          this.router.navigate(['/blogs']);
         },
         (error) => {
           this.isSubmitting = false;
