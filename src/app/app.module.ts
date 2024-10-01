@@ -15,6 +15,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { BlogModule } from './blog/blog.module';
 import { AuthModule } from './auth/auth.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { appConfig } from './app.config';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -34,7 +35,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
-  providers: [provideClientHydration()],
+  providers: [provideClientHydration(), appConfig.providers],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
