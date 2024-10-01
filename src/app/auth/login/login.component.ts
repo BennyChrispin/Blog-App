@@ -10,6 +10,8 @@ import { AuthService } from '../../core/auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -23,6 +25,16 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  // Function to toggle password visibility
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  // Function to toggle confirm password visibility
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   // Handle login form submission
   onSubmit() {

@@ -13,6 +13,8 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,6 +42,16 @@ export class RegisterComponent implements OnInit {
     const password = formGroup.get('password')?.value;
     const confirmPassword = formGroup.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { mismatch: true };
+  }
+
+  // Function to toggle password visibility
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  // Function to toggle confirm password visibility
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   onSubmit() {

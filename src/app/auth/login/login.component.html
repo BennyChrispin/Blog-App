@@ -79,8 +79,8 @@
             <input
               id="password"
               formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
               class="w-full px-4 py-4 border-b border-gray-700 outline-none focus:border-b-2 focus:border-red-600 duration-300 transition-all ease-out"
-              type="password"
               placeholder="Password"
             />
             <div
@@ -90,8 +90,21 @@
               "
               class="text-red-500 text-xs absolute bottom-1 right-2"
             >
-              Password is required.
+              Password is required (min 8 characters).
             </div>
+            <!-- Eye icon to toggle password visibility -->
+            <span
+              class="absolute right-4 top-4 cursor-pointer"
+              (click)="togglePasswordVisibility()"
+            >
+              <img
+                [src]="
+                  showPassword ? 'assets/eye-open.svg' : 'assets/eye-closed.svg'
+                "
+                alt="Toggle Password Visibility"
+                class="w-5 h-5"
+              />
+            </span>
           </div>
 
           <!-- Submit Button -->
