@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/auth.service';
+import { Store } from '@ngrx/store';
+import { login } from '../../../store/auth/auth.actions';
+import { AuthState } from '../../../store/auth/auth.state';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +13,10 @@ import { AuthService } from '../../core/auth.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   showPassword = false;
-  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private store: Store<{ auth: AuthState }>,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -24,16 +25,18 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Subscribe to the auth state
+    this.store.select('auth').subscribe((authState) => {
+      if (authState.user && Object.keys(authState.user).length > 0) {
+        this.router.navigate(['/blogs']);
+      }
+    });
+  }
 
   // Function to toggle password visibility
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
-  }
-
-  // Function to toggle confirm password visibility
-  toggleConfirmPasswordVisibility() {
-    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   // Handle login form submission
@@ -41,17 +44,8 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
 
-      // Log in with Firebase
-      this.authService.login(email, password).subscribe(
-        (user) => {
-          console.log('Login successful', user);
-          // Redirect to the blog component after successful login
-          this.router.navigate(['/blogs']);
-        },
-        (error) => {
-          console.error('Login error:', error);
-        }
-      );
+      // Dispatch the login action
+      this.store.dispatch(login({ email, password }));
     }
   }
 }

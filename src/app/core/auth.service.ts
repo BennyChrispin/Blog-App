@@ -1,60 +1,44 @@
 import { Injectable, Inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AuthState } from '../../store/auth/auth.state';
 import { Auth, User, UserCredential } from '@angular/fire/auth';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
-import { from, Observable, map, switchMap, catchError, throwError } from 'rxjs';
-import { Firestore, doc, setDoc } from '@angular/fire/firestore';
+import { from, Observable, map, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    @Inject(Auth) private auth: Auth,
-    private firestore: Firestore,
-    private store: Store<AuthState>
-  ) {}
+  constructor(@Inject(Auth) private auth: Auth) {}
 
-  // Register method that returns the User object and stores additional user data
-  register(
-    email: string,
-    password: string,
-    name: string,
-    username: string
-  ): Observable<User> {
+  register(email: string, password: string): Observable<User> {
     return from(
       createUserWithEmailAndPassword(this.auth, email, password)
     ).pipe(
-      switchMap((userCredential: UserCredential) => {
-        const user = userCredential.user;
-
-        // Store additional user details in Firestore
-        const userRef = doc(this.firestore, `users/${user.uid}`);
-        return from(
-          setDoc(userRef, { name, username, email: user.email })
-        ).pipe(map(() => user));
-      }),
+      map((userCredential: UserCredential) => userCredential.user),
       catchError((error) => {
-        console.error('Registration error:', error); // Log the error
-        return throwError(() => new Error(error)); // Pass the error to the component
+        if (error.code === 'auth/email-already-in-use') {
+          return throwError(() => new Error('This email is already in use.'));
+        }
+        return throwError(() => new Error('Failed to create user account.'));
       })
     );
   }
 
-  // Login method that returns only the User object
   login(email: string, password: string): Observable<User> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      map((userCredential: UserCredential) => userCredential.user)
+      map((userCredential: UserCredential) => userCredential.user),
+      catchError(() =>
+        throwError(() => new Error('Invalid email or password.'))
+      )
     );
   }
 
-  // Logout method
   logout(): Observable<void> {
-    return from(signOut(this.auth));
+    return from(signOut(this.auth)).pipe(
+      catchError(() => throwError(() => new Error('Failed to log out.')))
+    );
   }
 }

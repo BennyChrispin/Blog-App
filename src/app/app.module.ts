@@ -18,6 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { appConfig } from './app.config';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { AuthEffects } from '../store/auth/auth.effects';
+import { authReducer } from '../store/auth/auth.reducer';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -32,7 +34,6 @@ import { ToastrModule } from 'ngx-toastr';
     }),
     ReactiveFormsModule,
     StoreModule.forRoot({}, {}),
-    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     BrowserAnimationsModule,
     ToastrModule.forRoot({
@@ -42,6 +43,8 @@ import { ToastrModule } from 'ngx-toastr';
       preventDuplicates: true,
       timeOut: 3000,
     }),
+    EffectsModule.forRoot([AuthEffects]),
+    StoreModule.forRoot({ auth: authReducer }),
   ],
   providers: [provideClientHydration(), appConfig.providers],
   bootstrap: [AppComponent],
