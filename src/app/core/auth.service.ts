@@ -1,5 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
-import { Auth, User, UserCredential } from '@angular/fire/auth';
+import {
+  Auth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  User,
+  UserCredential,
+} from '@angular/fire/auth';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -33,6 +39,15 @@ export class AuthService {
       catchError(() =>
         throwError(() => new Error('Invalid email or password.'))
       )
+    );
+  }
+
+  // Add Google sign-in method
+  loginWithGoogle(): Observable<User> {
+    const provider = new GoogleAuthProvider();
+    return from(signInWithPopup(this.auth, provider)).pipe(
+      map((userCredential: UserCredential) => userCredential.user),
+      catchError(() => throwError(() => new Error('Google sign-in failed')))
     );
   }
 

@@ -10,6 +10,7 @@ import {
   selectAuthSuccess,
 } from '../../../store/auth/auth.selectors';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<{ auth: AuthState }>,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -38,7 +40,6 @@ export class LoginComponent implements OnInit {
       .select(selectAuthSuccess)
       .pipe(filter((success) => success))
       .subscribe(() => {
-        console.log('Login was successful!');
         this.toastr.success('Login successful!', 'Success');
         this.router.navigate(['/blogs']);
       });
@@ -53,6 +54,20 @@ export class LoginComponent implements OnInit {
           'Login Failed'
         );
       });
+  }
+
+  // Add Google sign-in logic
+  loginWithGoogle() {
+    this.authService.loginWithGoogle().subscribe({
+      next: (user) => {
+        console.log('Google Sign-In successful', user);
+        this.router.navigate(['/blogs']);
+        this.toastr.success('Google Sign-In successful!', 'Success');
+      },
+      error: (error) => {
+        this.toastr.error(error.message, 'Google Sign-In Failed');
+      },
+    });
   }
 
   // Function to toggle password visibility

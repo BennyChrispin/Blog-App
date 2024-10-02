@@ -10,6 +10,7 @@ import {
   selectAuthSuccess,
 } from '../../../store/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -27,7 +28,8 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<AuthState>,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.registerForm = this.fb.group(
       {
@@ -62,6 +64,20 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/blogs']);
         this.registerForm.reset();
       });
+  }
+
+  // Add Google sign-in logic
+  loginWithGoogle() {
+    this.authService.loginWithGoogle().subscribe({
+      next: (user) => {
+        // console.log('Google Sign-In successful', user);
+        this.router.navigate(['/blogs']);
+        this.toastr.success('Google Sign-In successful!', 'Success');
+      },
+      error: (error) => {
+        this.toastr.error(error.message, 'Google Sign-In Failed');
+      },
+    });
   }
 
   passwordMatchValidator(formGroup: FormGroup) {
