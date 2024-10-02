@@ -37,7 +37,10 @@ export class AuthEffects {
       ofType(login),
       switchMap((action) =>
         this.authService.login(action.email, action.password).pipe(
-          map((user) => loginSuccess({ user })),
+          map((user) => {
+            console.log('Login Success Action Dispatched:', user);
+            return loginSuccess({ user });
+          }),
           catchError((error) => of(loginFailure({ error: error.message })))
         )
       )

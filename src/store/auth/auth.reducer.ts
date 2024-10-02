@@ -5,6 +5,7 @@ import {
   registerFailure,
   loginFailure,
   registerSuccess,
+  loginSuccess,
 } from './auth.actions';
 import { User } from 'firebase/auth';
 
@@ -26,5 +27,9 @@ export const authReducer = createReducer(
     ...state,
     error,
   })),
-  on(registerSuccess, (state, { user }) => ({ ...state, user, error: null }))
+  on(registerSuccess, (state, { user }) => ({ ...state, user, error: null })),
+  on(loginSuccess, (state, { user }) => {
+    console.log('User set in state:', user);
+    return { ...state, user, error: null };
+  })
 );
