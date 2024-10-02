@@ -5,7 +5,10 @@ import { Store } from '@ngrx/store';
 import { register } from '../../../store/auth/auth.actions';
 import { AuthState } from '../../../store/auth/auth.state';
 import { ToastrService } from 'ngx-toastr';
-import { selectAuthError } from '../../../store/auth/auth.selectors';
+import {
+  selectAuthError,
+  selectAuthSuccess,
+} from '../../../store/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
 
 @Component({
@@ -37,19 +40,27 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Subscribe to error messages from the store
+    // Subscribe to registration success and error
     this.store
       .select(selectAuthError)
+      .pipe(filter((error) => !!error))
+      .subscribe((error) => {
+        this.isSubmitting = false;
+        this.handleRegistrationError(error);
+        this.showToast(this.errorMessage, 'error');
+      });
+
+    this.store
+      .select(selectAuthSuccess)
       .pipe(
-        filter((error) => !!error),
+        filter((success) => success),
         take(1)
       )
-      .subscribe((error) => {
-        this.handleRegistrationError(error);
-        this.showToast(
-          this.errorMessage || 'An unexpected error occurred.',
-          'error'
-        );
+      .subscribe(() => {
+        this.isSubmitting = false;
+        this.showToast('Registration successful!', 'success');
+        this.router.navigate(['/blogs']);
+        this.registerForm.reset();
       });
   }
 

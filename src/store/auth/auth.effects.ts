@@ -9,7 +9,7 @@ import {
   loginSuccess,
   loginFailure,
 } from './auth.actions';
-import { switchMap, catchError, map } from 'rxjs/operators';
+import { switchMap, catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Injectable()
@@ -22,8 +22,8 @@ export class AuthEffects {
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(register),
-      switchMap((action) =>
-        this.authService.register(action.email, action.password).pipe(
+      mergeMap(({ email, password }) =>
+        this.authService.register(email, password).pipe(
           map((user) => registerSuccess({ user })),
           catchError((error) => of(registerFailure({ error: error.message })))
         )

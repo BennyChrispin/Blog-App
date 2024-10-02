@@ -10,6 +10,12 @@ export const selectAuthUser = createSelector(
   (state) => state.user
 );
 
+// Selector Success
+export const selectAuthSuccess = createSelector(
+  selectAuthState,
+  (state) => !state.error && !!state.user
+);
+
 // Select the error
 export const selectAuthError = createSelector(
   selectAuthState,
