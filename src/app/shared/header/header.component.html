@@ -36,19 +36,16 @@
       </div>
       <div class="flex items-center space-x-8">
         <ng-container *ngIf="user$ | async as user; else signInLink">
-          <div
-            *ngIf="user; else signInLink"
-            class="flex items-center space-x-2"
-          >
+          <!-- Show user avatar if logged in -->
+          <div class="flex items-center space-x-2">
             <img
-              [src]="user.photoURL || 'assets/user.svg'"
+              [src]="user.photoURL || '../../../assets/user.svg'"
               alt="User Avatar"
               class="w-8 h-8 rounded-full"
             />
             <h3 class="font-medium text-gray-700 text-base">
               {{ user.displayName }}
             </h3>
-            <p>{{ user | json }}</p>
           </div>
         </ng-container>
 
