@@ -1,6 +1,9 @@
 /* Import Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Playfair+Display:wght@400;700&display=swap");
 
+/* Import Toast */
+@import "ngx-toastr/toastr";
+
 /* Import Tailwind CSS */
 @tailwind base;
 @tailwind components;
@@ -18,4 +21,21 @@ h4,
 h5,
 h6 {
   font-family: "Playfair Display", serif;
+}
+
+/* Toast Styling */
+
+.toast-top-right {
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.toast-success {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.toast-error {
+  background-color: #dc3545 !important;
+  color: white !important;
 }

@@ -9,12 +9,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [LoginComponent, RegisterComponent, UserProfileComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-  ],
+  imports: [CommonModule, ReactiveFormsModule],
   exports: [RegisterComponent, LoginComponent],
 })
 export class AuthModule {}
