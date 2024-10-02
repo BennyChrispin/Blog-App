@@ -10,8 +10,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { HeaderComponent } from './shared/header/header.component';
-import { FooterComponent } from './shared/footer/footer.component';
 import { BlogModule } from './blog/blog.module';
 import { AuthModule } from './auth/auth.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -21,14 +19,16 @@ import { ToastrModule } from 'ngx-toastr';
 import { AuthEffects } from '../store/auth/auth.effects';
 import { authReducer } from '../store/auth/auth.reducer';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BlogModule,
     AuthModule,
+    SharedModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',

@@ -28,8 +28,8 @@ export const authReducer = createReducer(
     error,
   })),
   on(registerSuccess, (state, { user }) => ({ ...state, user, error: null })),
-  on(loginSuccess, (state, { user }) => {
-    console.log('User set in state:', user);
-    return { ...state, user, error: null };
-  })
+  on(loginSuccess, (state, { user }) => ({
+    ...state,
+    user: user,
+  }))
 );

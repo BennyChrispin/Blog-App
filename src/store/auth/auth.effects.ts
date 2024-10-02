@@ -46,4 +46,20 @@ export class AuthEffects {
       )
     )
   );
+
+  // Effect to handle user Google login
+  loginWithGoogle$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType('[Auth] Google Login'),
+      switchMap(() =>
+        this.authService.loginWithGoogle().pipe(
+          map((user) => {
+            console.log('User data:', user);
+            return loginSuccess({ user });
+          }),
+          catchError((error) => of(loginFailure({ error: error.message })))
+        )
+      )
+    )
+  );
 }

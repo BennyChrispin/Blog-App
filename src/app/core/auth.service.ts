@@ -35,7 +35,11 @@ export class AuthService {
 
   login(email: string, password: string): Observable<User> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      map((userCredential: UserCredential) => userCredential.user),
+      map((userCredential: UserCredential) => {
+        const user = userCredential.user;
+        // Store user details including photoURL
+        return user;
+      }),
       catchError(() =>
         throwError(() => new Error('Invalid email or password.'))
       )
@@ -46,7 +50,11 @@ export class AuthService {
   loginWithGoogle(): Observable<User> {
     const provider = new GoogleAuthProvider();
     return from(signInWithPopup(this.auth, provider)).pipe(
-      map((userCredential: UserCredential) => userCredential.user),
+      map((userCredential: UserCredential) => {
+        const user = userCredential.user;
+        // Store user details including photoURL
+        return user;
+      }),
       catchError(() => throwError(() => new Error('Google sign-in failed')))
     );
   }
