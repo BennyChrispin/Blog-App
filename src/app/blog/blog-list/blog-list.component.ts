@@ -12,6 +12,8 @@ export class BlogListComponent implements OnInit {
   trendingPosts$: Observable<BlogPost[]> | null = null;
   nonTrendingPosts$: Observable<BlogPost[]> | null = null;
 
+  expandedPosts: { [index: number]: boolean } = {};
+
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
@@ -29,5 +31,13 @@ export class BlogListComponent implements OnInit {
         observer.next(nonTrending);
       });
     });
+  }
+
+  togglePostContent(index: number): void {
+    this.expandedPosts[index] = !this.expandedPosts[index];
+  }
+
+  isPostExpanded(index: number): boolean {
+    return !!this.expandedPosts[index];
   }
 }

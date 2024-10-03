@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../../core/post.service';
 import { BlogPost } from '../../models/blog-post.model';
+import { AuthService } from '../../core/auth.service'; // Import AuthService to get user details
 
 @Component({
   selector: 'app-blog-create',
@@ -19,7 +20,7 @@ export class BlogCreateComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private auth: Auth,
+    private authService: AuthService,
     private fb: FormBuilder,
     private postService: PostService
   ) {
@@ -52,25 +53,34 @@ export class BlogCreateComponent {
       // Get the current timestamp
       const createdAt = new Date().toISOString();
 
-      // Create a blog post object based on the BlogPost interface
-      const blogPost: BlogPost = {
-        title: this.blogForm.value.title,
-        content: this.blogForm.value.content,
-        image: this.blogForm.value.image,
-        userUUID: this.userUUID as string,
-        createdAt: createdAt,
-        isBookmarked: false,
-        isTrending: this.blogForm.value.isTrending,
-        likes: [],
-        comments: [],
-      };
+      // Get the current user details
+      const user = this.authService.getCurrentUser();
 
-      try {
-        await this.postService.createPost(blogPost);
-        console.log('Blog post added successfully!');
-        this.close();
-      } catch (error) {
-        console.error('Error adding blog post: ', error);
+      if (user) {
+        // Create a blog post object based on the BlogPost interface
+        const blogPost: BlogPost = {
+          title: this.blogForm.value.title,
+          content: this.blogForm.value.content,
+          image: this.blogForm.value.image,
+          userUUID: this.userUUID as string,
+          createdAt: createdAt,
+          isBookmarked: false,
+          isTrending: this.blogForm.value.isTrending,
+          likes: [],
+          comments: [],
+          authorUUID: user.uid,
+          authorDisplayName: user.displayName || 'Anonymous',
+        };
+
+        try {
+          await this.postService.createPost(blogPost);
+          console.log('Blog post added successfully!');
+          this.close();
+        } catch (error) {
+          console.error('Error adding blog post: ', error);
+        }
+      } else {
+        console.error('User not authenticated.');
       }
     } else {
       console.log('Form is invalid');

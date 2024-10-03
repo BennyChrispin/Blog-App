@@ -11,15 +11,22 @@ import {
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { BlogPost } from '../models/blog-post.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private authService: AuthService) {}
 
-  // Create a Post
+  // Create a Post with author's information
   async createPost(post: BlogPost) {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      post.authorUUID = user.uid;
+      post.authorDisplayName = user.displayName || 'Anonymous';
+    }
+
     const postCollection = collection(this.firestore, 'posts');
     return addDoc(postCollection, post);
   }
