@@ -25,12 +25,12 @@ import {
 })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
-  currentUser$ = this.currentUserSubject.asObservable(); // Observable for the current user
+  currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(@Inject(Auth) private auth: Auth) {
     // Listen for authentication state changes
     this.auth.onAuthStateChanged((user) => {
-      this.currentUserSubject.next(user); // Update the BehaviorSubject when auth state changes
+      this.currentUserSubject.next(user);
     });
   }
 
@@ -75,13 +75,13 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
-    return this.currentUserSubject.value; // Get the current value of the user
+    return this.currentUserSubject.value;
   }
 
   logout(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       map(() => {
-        this.currentUserSubject.next(null); // Clear the user on logout
+        this.currentUserSubject.next(null);
       }),
       catchError(() => throwError(() => new Error('Failed to log out.')))
     );
