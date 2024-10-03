@@ -12,10 +12,11 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   user: User | null = null;
   user$: Observable<User | null>;
-  showBlogCreateModal: boolean = false;
+
   constructor(private authService: AuthService, private router: Router) {
     this.user$ = this.authService.currentUser$;
   }
+
   ngOnInit() {
     this.user$.subscribe((user) => {
       this.user = user;
@@ -25,14 +26,9 @@ export class HeaderComponent implements OnInit {
   openBlogCreateModal() {
     if (this.user) {
       const userUUID = this.user.uid;
-      this.router.navigate(['/blog-create', userUUID]);
-      this.showBlogCreateModal = true;
+      this.router.navigate(['/blog-create', userUUID]).then(() => {});
     } else {
       console.error('User is not logged in');
     }
-  }
-
-  closeBlogCreateModal() {
-    this.showBlogCreateModal = false;
   }
 }
