@@ -11,6 +11,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 import {
   from,
   Observable,
@@ -27,7 +28,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(@Inject(Auth) private auth: Auth) {
+  constructor(@Inject(Auth) private auth: Auth, private router: Router) {
     // Listen for authentication state changes
     this.auth.onAuthStateChanged((user) => {
       this.currentUserSubject.next(user);
@@ -82,6 +83,7 @@ export class AuthService {
     return from(signOut(this.auth)).pipe(
       map(() => {
         this.currentUserSubject.next(null);
+        this.router.navigate(['/login']);
       }),
       catchError(() => throwError(() => new Error('Failed to log out.')))
     );

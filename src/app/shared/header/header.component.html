@@ -37,7 +37,10 @@
       <div class="flex items-center space-x-8">
         <ng-container *ngIf="user; else signInLink">
           <div class="flex items-center space-x-2">
-            <button class="border-2 border-gray-600 rounded-full">
+            <button
+              (click)="userProfileModal.openModal()"
+              class="border-2 border-gray-600 rounded-full"
+            >
               <img
                 [src]="user.photoURL || 'assets/blank-profile-picture-png.webp'"
                 alt="User Avatar"
@@ -45,6 +48,7 @@
               />
             </button>
           </div>
+          <app-user-profile #userProfileModal [user]="user"></app-user-profile>
         </ng-container>
         <ng-template #signInLink>
           <a
