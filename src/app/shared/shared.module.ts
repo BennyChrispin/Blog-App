@@ -4,6 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { UserProfileComponent } from '../auth/user-profile/user-profile.component';
 import { BlogCreateComponent } from '../blog/blog-create/blog-create.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,7 @@ import { BlogCreateComponent } from '../blog/blog-create/blog-create.component';
     UserProfileComponent,
     BlogCreateComponent,
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   exports: [
     HeaderComponent,
     FooterComponent,

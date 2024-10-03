@@ -25,45 +25,60 @@
       </svg>
     </button>
 
-    <!-- Title -->
-    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Blog Post</h2>
+    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Create Blog</h2>
 
-    <!-- Form -->
-    <form>
+    <form [formGroup]="blogForm" (ngSubmit)="onSend()">
       <input
         type="text"
+        id="title"
+        formControlName="title"
         class="outline-1 outline-gray-200 p-3 sm:p-4 w-full mb-4 mt-2 rounded-lg"
         placeholder="Blog Title"
       />
+      <div
+        *ngIf="blogForm.get('title')?.invalid && blogForm.get('title')?.touched"
+        class="text-red-500 text-sm"
+      >
+        Title is required.
+      </div>
 
       <textarea
         rows="4"
+        id="content"
+        formControlName="content"
         class="outline-1 outline-gray-200 p-3 sm:p-4 w-full mb-4 rounded-lg"
         placeholder="Write your article..."
       ></textarea>
+      <div
+        *ngIf="
+          blogForm.get('content')?.invalid && blogForm.get('content')?.touched
+        "
+        class="text-red-500 text-sm"
+      >
+        Content is required.
+      </div>
 
-      <label class="block mb-2 text-base sm:text-lg">Upload Image</label>
+      <label class="block mb-2 text-base sm:text-lg">Image URL</label>
       <input
-        type="file"
-        accept="image/*"
-        (change)="onFileSelected($event)"
+        type="text"
+        id="image"
+        formControlName="image"
         class="border border-gray-300 outline-gray-200 p-3 sm:p-4 w-full mb-4 rounded-lg"
+        placeholder="Paste image URL here"
       />
 
-      <!-- Preview image -->
       <img
-        *ngIf="imagePreview"
-        [src]="imagePreview"
+        *ngIf="blogForm.get('image')?.value"
+        [src]="blogForm.get('image')?.value"
         class="my-4 rounded-lg w-full h-48 sm:h-64 lg:h-72 object-cover"
         alt="Image Preview"
       />
 
-      <!-- Submit button -->
       <button
         type="submit"
         class="border-2 border-red-500 hover:bg-red-600 duration-300 transition-all ease-out text-red-500 hover:text-white py-4 px-4 sm:py-3 sm:px-6 lg:py-4 lg:px-8 rounded-2xl w-full font-bold mt-2 text-base sm:text-lg lg:text-xl"
       >
-        Publish Your Article
+        Publish Your Blog
       </button>
     </form>
   </div>

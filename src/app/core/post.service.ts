@@ -4,9 +4,6 @@ import {
   collection,
   addDoc,
   collectionData,
-  doc,
-  updateDoc,
-  deleteDoc,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
@@ -17,12 +14,17 @@ export class PostService {
   constructor(private firestore: Firestore) {}
 
   // Create a Post
-  createPost(post: any) {
+  async createPost(post: any, imageUrl: string | null) {
+    // If there is an image URL, add it to the post
+    if (imageUrl) {
+      post.image = imageUrl; // Add the image URL to the post
+    }
+
     const postCollection = collection(this.firestore, 'posts');
     return addDoc(postCollection, post);
   }
 
-  // Get all Post
+  // Get all Posts
   getPosts(): Observable<any[]> {
     const postCollection = collection(this.firestore, 'posts');
     return collectionData(postCollection, { idField: 'id' }).pipe(
@@ -33,15 +35,4 @@ export class PostService {
       })
     );
   }
-  // Get Post by id
-  // getPost(id: string): Observable<any> {
-  //   const postRef = doc(this.firestore, 'posts', id);
-  //   return doc(postRef)
-  //     .get()
-  //     .pipe(
-  //       map((doc: any) => {
-  //         return { id: doc.id, ...doc.data() };
-  //       })
-  //     );
-  // }
 }
