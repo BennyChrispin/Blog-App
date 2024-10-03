@@ -3,7 +3,7 @@ import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../../core/post.service';
-import { BlogPost } from '../../models/blog-post.model'; // Update the import path accordingly
+import { BlogPost } from '../../models/blog-post.model';
 
 @Component({
   selector: 'app-blog-create',
@@ -14,7 +14,6 @@ export class BlogCreateComponent {
   userUUID: string | null = null;
   imagePreview: string | null = null;
   blogForm: FormGroup;
-
   @Output() closeModal = new EventEmitter<void>();
 
   constructor(

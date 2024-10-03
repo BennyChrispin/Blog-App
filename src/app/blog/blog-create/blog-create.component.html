@@ -2,7 +2,7 @@
   class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-30 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
 >
   <div
-    class="bg-white p-6 sm:p-8 lg:p-10 rounded-2xl max-w-lg w-full relative md:max-w-xl lg:max-w-2xl"
+    class="bg-white p-6 sm:p-8 lg:p-10 rounded-3xl max-w-lg w-full relative md:max-w-xl lg:max-w-2xl"
   >
     <!-- Close button aligned to the top-right -->
     <button
@@ -28,44 +28,61 @@
     <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Create Blog</h2>
 
     <form [formGroup]="blogForm" (ngSubmit)="onSend()">
-      <input
-        type="text"
-        id="title"
-        formControlName="title"
-        class="outline-1 outline-gray-200 p-3 sm:p-4 w-full mb-4 mt-2 rounded-lg"
-        placeholder="Blog Title"
-      />
-      <div
-        *ngIf="blogForm.get('title')?.invalid && blogForm.get('title')?.touched"
-        class="text-red-500 text-sm"
-      >
-        Title is required.
+      <div class="relative">
+        <input
+          type="text"
+          id="title"
+          formControlName="title"
+          class="outline-1 outline-gray-200 p-3 sm:p-4 w-full mb-4 mt-2 rounded-lg"
+          placeholder="Blog Title"
+        />
+        <div
+          *ngIf="
+            blogForm.get('title')?.invalid && blogForm.get('title')?.touched
+          "
+          class="text-red-500 text-xs absolute bottom-8 right-3"
+        >
+          Title is required.
+        </div>
       </div>
 
-      <textarea
-        rows="4"
-        id="content"
-        formControlName="content"
-        class="outline-1 outline-gray-200 p-3 sm:p-4 w-full mb-4 rounded-lg"
-        placeholder="Write your article..."
-      ></textarea>
-      <div
-        *ngIf="
-          blogForm.get('content')?.invalid && blogForm.get('content')?.touched
-        "
-        class="text-red-500 text-sm"
-      >
-        Content is required.
+      <div class="relative">
+        <textarea
+          rows="4"
+          id="content"
+          formControlName="content"
+          class="outline-1 outline-gray-200 p-3 sm:p-4 w-full mb-4 rounded-lg"
+          placeholder="Write your article..."
+        ></textarea>
+
+        <div
+          *ngIf="
+            blogForm.get('content')?.invalid && blogForm.get('content')?.touched
+          "
+          class="text-red-500 text-xs absolute bottom-10 right-3"
+        >
+          Article is required.
+        </div>
       </div>
 
       <label class="block mb-2 text-base sm:text-lg">Image URL</label>
-      <input
-        type="text"
-        id="image"
-        formControlName="image"
-        class="border border-gray-300 outline-gray-200 p-3 sm:p-4 w-full mb-4 rounded-lg"
-        placeholder="Paste image URL here"
-      />
+      <div class="relative">
+        <input
+          type="text"
+          id="image"
+          formControlName="image"
+          class="border border-gray-300 outline-gray-200 p-3 sm:p-4 w-full mb-4 rounded-lg"
+          placeholder="Paste image URL here..."
+        />
+        <div
+          *ngIf="
+            blogForm.get('image')?.invalid && blogForm.get('image')?.touched
+          "
+          class="text-red-500 text-xs absolute bottom-8 right-3"
+        >
+          Image URL is required.
+        </div>
+      </div>
 
       <img
         *ngIf="blogForm.get('image')?.value"
