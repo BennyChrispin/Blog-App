@@ -109,6 +109,7 @@
           </div>
 
           <!-- Confirm Password -->
+          <!-- Confirm Password -->
           <div class="mb-4 relative">
             <input
               id="confirmPassword"
@@ -119,7 +120,7 @@
             />
             <div
               *ngIf="
-                registerForm.get('confirmPassword')?.invalid &&
+                registerForm.hasError('mismatch') &&
                 registerForm.get('confirmPassword')?.touched
               "
               class="text-red-500 text-xs absolute bottom-1 right-2"
