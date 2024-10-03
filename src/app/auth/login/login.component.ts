@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { login } from '../../../store/auth/auth.actions';
+import { login, loginSuccess } from '../../../store/auth/auth.actions';
 import { AuthState } from '../../../store/auth/auth.state';
 import {
   selectAuthError,
@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit {
     this.authService.loginWithGoogle().subscribe({
       next: (user) => {
         console.log('Google Sign-In successful', user);
+        this.store.dispatch(loginSuccess({ user }));
         this.router.navigate(['/blogs']);
         this.toastr.success('Google Sign-In successful!', 'Success');
       },

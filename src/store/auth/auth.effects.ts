@@ -8,6 +8,7 @@ import {
   login,
   loginSuccess,
   loginFailure,
+  loginWithGoogle,
 } from './auth.actions';
 import { switchMap, catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';

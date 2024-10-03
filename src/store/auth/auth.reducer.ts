@@ -28,8 +28,14 @@ export const authReducer = createReducer(
     error,
   })),
   on(registerSuccess, (state, { user }) => ({ ...state, user, error: null })),
-  on(loginSuccess, (state, { user }) => ({
-    ...state,
-    user: user,
-  }))
+  // When login is successful, update the user state
+  on(loginSuccess, (state, { user }) => {
+    console.log('Login Success in Reducer:', user);
+    return { ...state, user, error: null };
+  })
+  // on(loginSuccess, (state, { user }) => ({
+  //   ...state,
+  //   user: user, // Update user in the state
+  //   error: null,
+  // })),
 );

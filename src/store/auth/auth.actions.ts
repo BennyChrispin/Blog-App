@@ -38,3 +38,6 @@ export const loginFailure = createAction(
   '[Auth] Login Failure',
   props<{ error: string }>()
 );
+
+// Action for Google Login
+export const loginWithGoogle = createAction('[Auth] Google Login');

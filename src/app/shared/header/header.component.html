@@ -24,7 +24,7 @@
       <a
         href="#"
         class="font-medium text-gray-600 hover:font-bold duration-300 transition-all cursor-pointer ease-out"
-        >Community</a
+        >Bookmark</a
       >
     </div>
     <div class="flex items-center space-x-8">
@@ -36,16 +36,13 @@
       </div>
       <div class="flex items-center space-x-8">
         <ng-container *ngIf="user$ | async as user; else signInLink">
-          <!-- Show user avatar if logged in -->
+          <!-- Show user avatar and name if logged in -->
           <div class="flex items-center space-x-2">
             <button class="border-2 border-gray-400 p-2 rounded-full">
               <img
-                [src]="
-                  user.photoURL ||
-                  '../../../assets/blank-profile-picture-png.webp'
-                "
+                [src]="user.photoURL || 'assets/blank-profile-picture-png.webp'"
                 alt="User Avatar"
-                class="w-10 h-10 rounded-full"
+                class="w-8 h-8"
               />
             </button>
 
