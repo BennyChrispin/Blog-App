@@ -1,19 +1,24 @@
-import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { AuthState } from '../../../store/auth/auth.state';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../core/auth.service';
 import { User } from '@angular/fire/auth';
-import { selectAuthUser } from '../../../store/auth/auth.selectors';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  user: User | null = null;
   user$: Observable<User | null>;
 
-  constructor(private store: Store<{ auth: AuthState }>) {
-    this.user$ = this.store.select(selectAuthUser);
+  constructor(private authService: AuthService) {
+    this.user$ = this.authService.currentUser$;
+  }
+
+  ngOnInit() {
+    this.user$.subscribe((user) => {
+      this.user = user;
+    });
   }
 }

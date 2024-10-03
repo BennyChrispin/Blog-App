@@ -11,19 +11,37 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
-import { from, Observable, map, catchError, throwError } from 'rxjs';
+import {
+  from,
+  Observable,
+  map,
+  catchError,
+  throwError,
+  BehaviorSubject,
+} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(@Inject(Auth) private auth: Auth) {}
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable(); // Observable for the current user
+
+  constructor(@Inject(Auth) private auth: Auth) {
+    // Listen for authentication state changes
+    this.auth.onAuthStateChanged((user) => {
+      this.currentUserSubject.next(user); // Update the BehaviorSubject when auth state changes
+    });
+  }
 
   register(email: string, password: string): Observable<User> {
     return from(
       createUserWithEmailAndPassword(this.auth, email, password)
     ).pipe(
-      map((userCredential: UserCredential) => userCredential.user),
+      map((userCredential: UserCredential) => {
+        this.currentUserSubject.next(userCredential.user);
+        return userCredential.user;
+      }),
       catchError((error) => {
         if (error.code === 'auth/email-already-in-use') {
           return throwError(() => new Error('This email is already in use.'));
@@ -36,9 +54,8 @@ export class AuthService {
   login(email: string, password: string): Observable<User> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       map((userCredential: UserCredential) => {
-        const user = userCredential.user;
-        // Store user details including photoURL
-        return user;
+        this.currentUserSubject.next(userCredential.user);
+        return userCredential.user;
       }),
       catchError(() =>
         throwError(() => new Error('Invalid email or password.'))
@@ -46,21 +63,26 @@ export class AuthService {
     );
   }
 
-  // Add Google sign-in method
   loginWithGoogle(): Observable<User> {
     const provider = new GoogleAuthProvider();
     return from(signInWithPopup(this.auth, provider)).pipe(
       map((userCredential: UserCredential) => {
-        const user = userCredential.user;
-        // Store user details including photoURL
-        return user;
+        this.currentUserSubject.next(userCredential.user);
+        return userCredential.user;
       }),
       catchError(() => throwError(() => new Error('Google sign-in failed')))
     );
   }
 
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value; // Get the current value of the user
+  }
+
   logout(): Observable<void> {
     return from(signOut(this.auth)).pipe(
+      map(() => {
+        this.currentUserSubject.next(null); // Clear the user on logout
+      }),
       catchError(() => throwError(() => new Error('Failed to log out.')))
     );
   }
