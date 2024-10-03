@@ -30,17 +30,15 @@
 
     <!-- Form -->
     <form>
-      <label class="block mb-2 text-base sm:text-lg">Title</label>
       <input
         type="text"
-        class="border border-gray-500 outline-none p-3 sm:p-4 w-full mb-4 rounded-lg"
+        class="outline-1 outline-gray-200 p-3 sm:p-4 w-full mb-4 mt-2 rounded-lg"
         placeholder="Blog Title"
       />
 
-      <label class="block mb-2 text-base sm:text-lg">Article Story</label>
       <textarea
         rows="4"
-        class="border border-gray-500 outline-none p-3 sm:p-4 w-full mb-4 rounded-lg"
+        class="outline-1 outline-gray-200 p-3 sm:p-4 w-full mb-4 rounded-lg"
         placeholder="Write your article..."
       ></textarea>
 
@@ -49,7 +47,7 @@
         type="file"
         accept="image/*"
         (change)="onFileSelected($event)"
-        class="border border-gray-500 outline-none p-3 sm:p-4 w-full mb-4 rounded-lg"
+        class="border border-gray-300 outline-gray-200 p-3 sm:p-4 w-full mb-4 rounded-lg"
       />
 
       <!-- Preview image -->
