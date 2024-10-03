@@ -6,6 +6,7 @@ export interface BlogPost {
   userUUID: string;
   createdAt: string;
   isBookmarked: boolean;
+  isTrending: boolean;
   likes: string[];
   comments: Comment[];
 }

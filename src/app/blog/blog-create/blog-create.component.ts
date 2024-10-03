@@ -27,6 +27,7 @@ export class BlogCreateComponent {
       title: ['', Validators.required],
       content: ['', Validators.required],
       image: ['', Validators.required],
+      isTrending: [false],
     });
   }
 
@@ -59,6 +60,7 @@ export class BlogCreateComponent {
         userUUID: this.userUUID as string,
         createdAt: createdAt,
         isBookmarked: false,
+        isTrending: this.blogForm.value.isTrending,
         likes: [],
         comments: [],
       };

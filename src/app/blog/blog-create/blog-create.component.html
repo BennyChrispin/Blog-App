@@ -84,12 +84,25 @@
         </div>
       </div>
 
-      <img
-        *ngIf="blogForm.get('image')?.value"
-        [src]="blogForm.get('image')?.value"
-        class="my-4 rounded-lg w-full h-48 sm:h-64 lg:h-72 object-cover"
-        alt="Image Preview"
-      />
+      <!-- isTrending checkbox -->
+      <div class="my-4 flex items-center px-4">
+        <img
+          *ngIf="blogForm.get('image')?.value"
+          [src]="blogForm.get('image')?.value"
+          class="my-4 rounded-lg w-full h-48 sm:h-64 lg:h-72 object-cover"
+          alt="Image Preview"
+        />
+
+        <input
+          type="checkbox"
+          id="isTrending"
+          formControlName="isTrending"
+          class="h-6 w-6 text-red-500 border-gray-300 rounded"
+        />
+        <label for="isTrending" class="ml-2 text-gray-700 font-medium"
+          >Mark as Trending</label
+        >
+      </div>
 
       <button
         type="submit"
