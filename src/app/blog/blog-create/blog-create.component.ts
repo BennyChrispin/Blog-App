@@ -3,6 +3,7 @@ import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../../core/post.service';
+import { BlogPost } from '../../models/blog-post.model'; // Update the import path accordingly
 
 @Component({
   selector: 'app-blog-create',
@@ -51,17 +52,20 @@ export class BlogCreateComponent {
       // Get the current timestamp
       const createdAt = new Date().toISOString();
 
-      const blogPost = {
+      // Create a blog post object based on the BlogPost interface
+      const blogPost: BlogPost = {
         title: this.blogForm.value.title,
         content: this.blogForm.value.content,
         image: this.blogForm.value.image,
-        userUUID: this.userUUID,
+        userUUID: this.userUUID as string,
         createdAt: createdAt,
         isBookmarked: false,
+        likes: [],
+        comments: [],
       };
 
       try {
-        await this.postService.createPost(blogPost, null);
+        await this.postService.createPost(blogPost);
         console.log('Blog post added successfully!');
         this.close();
       } catch (error) {
