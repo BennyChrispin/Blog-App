@@ -1,11 +1,13 @@
 <div
-  class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-30 backdrop-blur-sm"
+  class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-30 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
 >
-  <div class="bg-white p-6 rounded-2xl max-w-lg w-full relative">
+  <div
+    class="bg-white p-6 sm:p-8 lg:p-10 rounded-2xl max-w-lg w-full relative md:max-w-xl lg:max-w-2xl"
+  >
     <!-- Close button aligned to the top-right -->
     <button
       (click)="close()"
-      class="absolute top-2 right-6 mt-2 p-2 border border-gray-600 rounded-full hover:border-2 hover:border-gray-800 hover:text-gray-800 text-gray-600 duration-300 transition-all ease-in"
+      class="absolute top-2 right-4 sm:right-6 mt-2 p-2 border border-gray-600 rounded-full hover:border-2 hover:border-gray-800 hover:text-gray-800 text-gray-600 duration-300 transition-all ease-in"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -23,40 +25,45 @@
       </svg>
     </button>
 
-    <h2 class="text-2xl font-bold mb-4">Blog Post</h2>
+    <!-- Title -->
+    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Blog Post</h2>
+
+    <!-- Form -->
     <form>
-      <label class="block mb-2">Title</label>
+      <label class="block mb-2 text-base sm:text-lg">Title</label>
       <input
         type="text"
-        class="border border-gray-500 outline-none p-3 w-full mb-4 rounded-lg"
+        class="border border-gray-500 outline-none p-3 sm:p-4 w-full mb-4 rounded-lg"
         placeholder="Blog Title"
       />
 
-      <label class="block mb-2">Article Story</label>
+      <label class="block mb-2 text-base sm:text-lg">Article Story</label>
       <textarea
-        class="border border-gray-500 outline-none p-3 w-full mb-4 rounded-lg"
-        placeholder="Write your article"
+        rows="4"
+        class="border border-gray-500 outline-none p-3 sm:p-4 w-full mb-4 rounded-lg"
+        placeholder="Write your article..."
       ></textarea>
 
-      <label class="block mb-2">Upload Image</label>
+      <label class="block mb-2 text-base sm:text-lg">Upload Image</label>
       <input
         type="file"
         accept="image/*"
         (change)="onFileSelected($event)"
-        class="border border-gray-500 outline-none p-3 w-full mb-4 rounded-lg"
+        class="border border-gray-500 outline-none p-3 sm:p-4 w-full mb-4 rounded-lg"
       />
 
       <!-- Preview image -->
       <img
         *ngIf="imagePreview"
         [src]="imagePreview"
-        class="my-4 rounded-lg w-full h-48 object-cover"
+        class="my-4 rounded-lg w-full h-48 sm:h-64 lg:h-72 object-cover"
         alt="Image Preview"
       />
 
+      <!-- Submit button -->
       <button
         type="submit"
-        class="border-2 border-red-500 hover:bg-red-600 duration-300 transition-all ease-out text-red-500 hover:text-white py-4 px-4 rounded-2xl w-full font-bold mt-2 text-base"
+        class="border-2 border-red-500 hover:bg-red-600 duration-300 transition-all ease-out text-red-500 hover:text-white py-4 px-4 sm:py-3 sm:px-6 lg:py-4 lg:px-8 rounded-2xl w-full font-bold mt-2 text-base sm:text-lg lg:text-xl"
       >
         Publish Your Article
       </button>
