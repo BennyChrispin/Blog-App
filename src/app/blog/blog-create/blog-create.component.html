@@ -1,7 +1,7 @@
 <div
   class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-30 backdrop-blur-sm"
 >
-  <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
+  <div class="bg-white p-6 rounded-2xl max-w-lg w-full relative">
     <!-- Close button aligned to the top-right -->
     <button
       (click)="close()"
@@ -23,26 +23,32 @@
       </svg>
     </button>
 
-    <h2 class="text-2xl font-bold mb-4">Create Blog Post</h2>
+    <h2 class="text-2xl font-bold mb-4">Blog Post</h2>
     <form>
       <label class="block mb-2">Title</label>
       <input
         type="text"
-        class="border p-2 w-full mb-4"
+        class="border border-gray-500 outline-none p-3 w-full mb-4 rounded-lg"
         placeholder="Blog Title"
       />
 
       <label class="block mb-2">Article Story</label>
       <textarea
-        class="border p-2 w-full mb-4"
+        class="border border-gray-500 outline-none p-3 w-full mb-4 rounded-lg"
         placeholder="Write your article"
       ></textarea>
 
       <label class="block mb-2">Upload Image</label>
-      <input type="file" class="border p-2 w-full mb-4" />
+      <input
+        type="file"
+        class="border border-gray-500 outline-none p-3 w-full mb-4 rounded-lg"
+      />
 
-      <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">
-        Submit
+      <button
+        type="submit"
+        class="border-2 border-red-500 hover:bg-red-600 duration-300 transition-all ease-out text-red-500 hover:text-white py-4 px-4 rounded-2xl w-full font-bold mt-2 text-base"
+      >
+        Create Post
       </button>
     </form>
   </div>
