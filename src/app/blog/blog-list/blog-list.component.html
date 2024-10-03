@@ -4,7 +4,7 @@
     <!-- Trending Posts Section -->
     <div class="trending-posts mb-12">
       <h2 class="text-2xl font-bold mb-6">Trending Blogs</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 w-full">
         <ng-container
           *ngIf="trendingPosts$ | async as trendingPosts; else noTrending"
         >
@@ -24,15 +24,17 @@
             <!-- Content Section (50% width) -->
             <div class="w-full flex flex-col justify-start">
               <div class="flex items-center space-x-4">
-                <p class="text-sm text-gray-500">
+                <p class="text-xs md:text-sm text-gray-500">
                   Written by: {{ post.authorDisplayName }}
                 </p>
-                <p class="text-sm text-gray-500">
+                <p class="text-xs md:text-sm text-gray-500">
                   {{ post.createdAt | date : "MMM-dd-yyyy" }}
                 </p>
               </div>
 
-              <h3 class="text-xl font-bold my-2 text-black">
+              <h3
+                class="sm:text-base md:text-lg lg:text-xl font-bold my-2 text-black"
+              >
                 {{ post.title }}
               </h3>
 
@@ -46,7 +48,9 @@
               </p>
 
               <!-- Button always at the bottom -->
-              <button class="text-red-500 font-bold hover:underline mt-auto">
+              <button
+                class="text-red-500 font-bold hover:underline mt-auto text-xs md::text-sm"
+              >
                 Read More
               </button>
 
@@ -54,7 +58,7 @@
                 class="flex items-center justify-between w-full border rounded-xl border-gray-300 mt-6 py-3 px-[50px]"
               >
                 <!-- Icons -->
-                <button class="text-gray-500 hover:text-gray-800">
+                <button class="text-gray-500 hover:text-gray-900">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -70,7 +74,7 @@
                     />
                   </svg>
                 </button>
-                <button class="text-gray-500 hover:text-gray-800">
+                <button class="text-gray-500 hover:text-gray-900">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -86,7 +90,7 @@
                     />
                   </svg>
                 </button>
-                <button class="text-gray-500 hover:text-gray-800">
+                <button class="text-gray-500 hover:text-gray-900">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -102,7 +106,7 @@
                     />
                   </svg>
                 </button>
-                <button class="text-gray-500 hover:text-gray-800">
+                <button class="text-gray-500 hover:text-gray-900">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
