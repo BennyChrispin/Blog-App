@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BlogCreateComponent {
   userUUID: string | null = null;
+  imagePreview: string | null = null;
 
   @Output() closeModal = new EventEmitter<void>();
 
@@ -18,8 +19,22 @@ export class BlogCreateComponent {
     console.log('BlogCreateComponent initialized with UUID:', this.userUUID);
   }
 
-  // Function to close the modal and navigate back to blogs
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        this.imagePreview = e.target?.result as string;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
   close() {
+    this.closeModal.emit();
     this.router.navigate(['/blogs']);
   }
 }
