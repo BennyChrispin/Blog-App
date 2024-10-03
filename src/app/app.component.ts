@@ -20,6 +20,10 @@ export class AppComponent {
   }
 
   isBlogRoute(): boolean {
-    return this.router.url === '/blogs' || this.router.url === '/profile';
+    return (
+      this.router.url.startsWith('/blogs') ||
+      this.router.url.startsWith('/blog-create') ||
+      this.router.url === '/profile'
+    );
   }
 }

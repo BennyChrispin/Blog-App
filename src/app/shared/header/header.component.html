@@ -28,12 +28,13 @@
       >
     </div>
     <div class="flex items-center space-x-8">
-      <div
+      <button
+        (click)="openBlogCreateModal()"
         class="flex items-center space-x-2 hover:text-gray-900 duration-300 transition-all cursor-pointer ease-out"
       >
         <img src="assets/write.svg" alt="Write Logo" class="w-5 h-5" />
         <h3 class="font-medium text-gray-700 text-base">Write</h3>
-      </div>
+      </button>
       <div class="flex items-center space-x-8">
         <ng-container *ngIf="user; else signInLink">
           <div class="flex items-center space-x-2">
@@ -62,3 +63,9 @@
     </div>
   </div>
 </div>
+
+<!-- Blog Create Modal -->
+<app-blog-create
+  *ngIf="showBlogCreateModal"
+  (closeModal)="closeBlogCreateModal()"
+></app-blog-create>

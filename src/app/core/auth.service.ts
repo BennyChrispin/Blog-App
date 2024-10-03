@@ -25,6 +25,9 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
+  isLoggedIn() {
+    throw new Error('Method not implemented.');
+  }
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
