@@ -36,7 +36,7 @@ export class BlogCreateComponent {
   }
 
   updateImagePreview(): void {
-    this.imagePreview = this.blogForm.get('image')?.value; // Set preview from URL input
+    this.imagePreview = this.blogForm.get('image')?.value;
   }
 
   close() {
@@ -54,13 +54,14 @@ export class BlogCreateComponent {
       const blogPost = {
         title: this.blogForm.value.title,
         content: this.blogForm.value.content,
-        image: this.blogForm.value.image, // Use the URL directly
+        image: this.blogForm.value.image,
         userUUID: this.userUUID,
         createdAt: createdAt,
+        isBookmarked: false,
       };
 
       try {
-        await this.postService.createPost(blogPost, null); // No image file to upload
+        await this.postService.createPost(blogPost, null);
         console.log('Blog post added successfully!');
         this.close();
       } catch (error) {
