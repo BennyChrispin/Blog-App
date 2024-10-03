@@ -38,11 +38,17 @@
         <ng-container *ngIf="user$ | async as user; else signInLink">
           <!-- Show user avatar if logged in -->
           <div class="flex items-center space-x-2">
-            <img
-              [src]="user.photoURL || '../../../assets/user.svg'"
-              alt="User Avatar"
-              class="w-8 h-8 rounded-full"
-            />
+            <button class="border-2 border-gray-400 p-2 rounded-full">
+              <img
+                [src]="
+                  user.photoURL ||
+                  '../../../assets/blank-profile-picture-png.webp'
+                "
+                alt="User Avatar"
+                class="w-10 h-10 rounded-full"
+              />
+            </button>
+
             <h3 class="font-medium text-gray-700 text-base">
               {{ user.displayName }}
             </h3>
