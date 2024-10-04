@@ -12,32 +12,42 @@ export class BlogListComponent implements OnInit {
   trendingPosts$: Observable<BlogPost[]> | null = null;
   nonTrendingPosts$: Observable<BlogPost[]> | null = null;
 
-  expandedPosts: { [index: number]: boolean } = {};
+  isLoadingTrending = true;
+  isLoadingNonTrending = true;
+
+  hasTrendingPosts = true; // New flag
+  hasNonTrendingPosts = true; // New flag
 
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    // Fetch all posts
     this.postService.getPosts().subscribe((posts) => {
-      // Separate trending and non-trending posts
       const trending = posts.filter((post) => post.isTrending);
       const nonTrending = posts.filter((post) => !post.isTrending);
 
-      this.trendingPosts$ = new Observable((observer) => {
-        observer.next(trending);
-      });
+      // Set the flag to false if no trending posts are found
+      this.hasTrendingPosts = trending.length > 0;
+      this.hasNonTrendingPosts = nonTrending.length > 0;
 
-      this.nonTrendingPosts$ = new Observable((observer) => {
-        observer.next(nonTrending);
-      });
+      // Simulate loading state for trending posts
+      setTimeout(() => {
+        if (this.hasTrendingPosts) {
+          this.trendingPosts$ = new Observable((observer) => {
+            observer.next(trending);
+          });
+        }
+        this.isLoadingTrending = false;
+      }, 1000);
+
+      // Simulate loading state for non-trending posts
+      setTimeout(() => {
+        if (this.hasNonTrendingPosts) {
+          this.nonTrendingPosts$ = new Observable((observer) => {
+            observer.next(nonTrending);
+          });
+        }
+        this.isLoadingNonTrending = false;
+      }, 1000);
     });
-  }
-
-  togglePostContent(index: number): void {
-    this.expandedPosts[index] = !this.expandedPosts[index];
-  }
-
-  isPostExpanded(index: number): boolean {
-    return !!this.expandedPosts[index];
   }
 }

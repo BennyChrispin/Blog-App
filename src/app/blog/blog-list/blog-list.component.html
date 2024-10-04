@@ -4,14 +4,19 @@
     <!-- Trending Posts Section -->
     <div class="trending-posts mb-12">
       <h2 class="text-2xl font-bold mb-6">Trending Blogs</h2>
-      <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 w-full">
-        <ng-container
-          *ngIf="trendingPosts$ | async as trendingPosts; else noTrending"
-        >
-          <div
-            *ngFor="let post of trendingPosts; let i = index"
-            class="flex w-full space-x-8"
-          >
+
+      <!-- Loading Spinner for Trending Posts -->
+      <div *ngIf="isLoadingTrending" class="flex justify-center items-center">
+        <div class="loader"></div>
+      </div>
+
+      <!-- Trending Posts Grid -->
+      <div
+        *ngIf="!isLoadingTrending && hasTrendingPosts; else noTrending"
+        class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 w-full"
+      >
+        <ng-container *ngFor="let post of trendingPosts$ | async">
+          <div class="flex w-full space-x-8">
             <!-- Image Section (50% width) -->
             <div class="w-full">
               <img
@@ -49,7 +54,7 @@
 
               <!-- Button always at the bottom -->
               <button
-                class="text-red-500 font-bold hover:underline mt-auto text-xs md::text-sm"
+                class="text-red-500 font-bold hover:underline mt-auto text-xs md:text-sm"
               >
                 Read More
               </button>
@@ -106,14 +111,14 @@
                     />
                   </svg>
                 </button>
-                <button class="text-gray-500 hover:text-gray-900">
+                <button class="text-gray-500 hover:text-gray-900 -rotate-45">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
                     stroke="currentColor"
-                    class="size-6 -rotate-45"
+                    class="size-6"
                   >
                     <path
                       stroke-linecap="round"
@@ -126,26 +131,33 @@
             </div>
           </div>
         </ng-container>
-        <ng-template #noTrending>
-          <p>No trending posts available.</p>
-        </ng-template>
       </div>
+
+      <!-- No Trending Posts Template -->
+      <ng-template #noTrending>
+        <p>No trending posts available.</p>
+      </ng-template>
     </div>
 
     <!-- Non-Trending Posts Section -->
     <div class="non-trending-posts">
       <h2 class="text-2xl font-bold mb-4">Latest Blogs</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ng-container
-          *ngIf="
-            nonTrendingPosts$ | async as nonTrendingPosts;
-            else noNonTrending
-          "
-        >
-          <div
-            *ngFor="let post of nonTrendingPosts"
-            class="p-4 bg-white shadow rounded-lg"
-          >
+
+      <!-- Loading Spinner for Non-Trending Posts -->
+      <div
+        *ngIf="isLoadingNonTrending"
+        class="flex justify-center items-center"
+      >
+        <div class="loader"></div>
+      </div>
+
+      <!-- Non-Trending Posts Grid -->
+      <div
+        *ngIf="!isLoadingNonTrending && hasNonTrendingPosts; else noNonTrending"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        <ng-container *ngFor="let post of nonTrendingPosts$ | async">
+          <div class="p-4 bg-white shadow rounded-lg">
             <img
               [src]="post.image"
               alt="Blog Image"
@@ -160,10 +172,12 @@
             </button>
           </div>
         </ng-container>
-        <ng-template #noNonTrending>
-          <p>No non-trending posts available.</p>
-        </ng-template>
       </div>
+
+      <!-- No Non-Trending Posts Template -->
+      <ng-template #noNonTrending>
+        <p>No non-trending posts available.</p>
+      </ng-template>
     </div>
   </div>
 </div>
