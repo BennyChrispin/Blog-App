@@ -232,6 +232,19 @@
               alt="Blog Image"
               class="w-full h-40 object-cover rounded-lg mb-4"
             />
+            <div class="flex items-center space-x-4 mt-4">
+              <p class="text-xs md:text-sm text-gray-500">
+                Written by:
+                {{
+                  post.authorDisplayName.length > 15
+                    ? (post.authorDisplayName | slice : 0 : 15) + "..."
+                    : post.authorDisplayName
+                }}
+              </p>
+              <p class="text-xs md:text-sm text-gray-500">
+                {{ post.createdAt | date : "MMM-dd-yyyy" }}
+              </p>
+            </div>
             <h3
               class="sm:text-base md:text-lg lg:text-xl font-bold my-2 text-black mb-2"
             >
@@ -379,19 +392,6 @@
                   />
                 </svg>
               </button>
-            </div>
-            <div class="flex items-center space-x-4 mt-4">
-              <p class="text-xs md:text-sm text-gray-500">
-                Written by:
-                {{
-                  post.authorDisplayName.length > 15
-                    ? (post.authorDisplayName | slice : 0 : 15) + "..."
-                    : post.authorDisplayName
-                }}
-              </p>
-              <p class="text-xs md:text-sm text-gray-500">
-                {{ post.createdAt | date : "MMM-dd-yyyy" }}
-              </p>
             </div>
           </div>
         </ng-container>
