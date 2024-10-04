@@ -9,6 +9,7 @@ import {
   arrayUnion,
   arrayRemove,
   getDoc,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { BlogPost } from '../models/blog-post.model';
@@ -18,9 +19,6 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class PostService {
-  deletePost(id: string | undefined) {
-    throw new Error('Method not implemented.');
-  }
   constructor(private firestore: Firestore, private authService: AuthService) {}
 
   // Create a Post with author's information
@@ -72,6 +70,12 @@ export class PostService {
     // Create an object containing only the properties you want to update
     const { title, content, image, isTrending } = post;
     await updateDoc(postDoc, { title, content, image, isTrending });
+  }
+
+  // Delete a post by its ID
+  async deletePost(id: string): Promise<void> {
+    const postDoc = doc(this.firestore, `posts/${id}`);
+    await deleteDoc(postDoc);
   }
 
   // Like a Post

@@ -7,6 +7,7 @@ import { CommentSectionComponent } from './comment-section/comment-section.compo
 import { BannerComponent } from './banner/banner.component';
 import { BlogSingleListComponent } from './blog-single-list/blog-single-list.component';
 import { SharedModule } from '../shared/shared.module';
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SharedModule } from '../shared/shared.module';
     CommentSectionComponent,
     BannerComponent,
     BlogSingleListComponent,
+    ConfirmationModalComponent,
   ],
   imports: [CommonModule, SharedModule],
 })

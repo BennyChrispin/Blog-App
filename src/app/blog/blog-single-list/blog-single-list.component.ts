@@ -23,6 +23,7 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   @Input() post: BlogPost | null = null;
   @ViewChild(BlogCreateComponent, { static: false })
   blogCreateComponent!: BlogCreateComponent;
+  showConfirmationModal = false;
 
   isOpen = false;
   blogId: string | null = null;
@@ -72,7 +73,7 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   }
 
   openEditModal(post: BlogPost) {
-    this.isOpen = true; // Open the modal
+    this.isOpen = true;
     setTimeout(() => {
       if (this.blogCreateComponent) {
         this.blogCreateComponent.post = post;
@@ -86,9 +87,29 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  deletePost() {
-    if (this.post) {
-      console.log('Deleting post:', this.post.id);
+  confirmDelete() {
+    this.showConfirmationModal = true;
+  }
+
+  // Function to close the confirmation modal
+  closeDeleteModal() {
+    this.showConfirmationModal = false;
+  }
+
+  // Function to handle post deletion when confirmed
+  onDeleteConfirm() {
+    if (this.post && this.post.id) {
+      this.postService
+        .deletePost(this.post.id)
+        .then(() => {
+          this.closeDeleteModal();
+          this.router.navigate(['/blogs']);
+        })
+        .catch((error) => {
+          console.error('Error deleting post:', error);
+        });
+    } else {
+      console.error('Post or Post ID is undefined.');
     }
   }
 

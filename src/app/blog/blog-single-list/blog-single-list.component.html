@@ -21,7 +21,9 @@
         />
 
         <!-- Title -->
-        <h1 class="text-2xl text-black font-bold mt-4">{{ post.title }}</h1>
+        <h1 class="text-2xl text-black font-bold mt-4">
+          {{ post.title }}
+        </h1>
 
         <!-- Author and Date -->
         <div class="text-gray-500 text-sm flex justify-between mt-2">
@@ -57,8 +59,8 @@
             Edit
           </button>
           <button
-            *ngIf="currentUserDisplayName === post.authorDisplayName"
-            (click)="deletePost()"
+            *ngIf="currentUserDisplayName === post?.authorDisplayName"
+            (click)="confirmDelete()"
             class="text-red-600 hover:underline hover:font-bold duration-300 transition-all ease-out"
           >
             Delete
@@ -156,4 +158,14 @@
     <app-blog-create [post]="post" (closeModal)="close()" #blogCreateComponent>
     </app-blog-create>
   </div>
+</div>
+
+<!-- Modal for Confirmation of delete -->
+<div *ngIf="showConfirmationModal">
+  <app-confirmation-modal
+    [title]="post?.title || ''"
+    (confirm)="onDeleteConfirm()"
+    (cancelModal)="closeDeleteModal()"
+  >
+  </app-confirmation-modal>
 </div>
