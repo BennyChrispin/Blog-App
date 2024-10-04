@@ -1,16 +1,17 @@
 <div class="fixed top-0 w-full mx-auto">
   <div
-    class="flex justify-between items-center bg-white border-gray-400 px-24 p-6"
+    class="flex justify-between items-center bg-white border-gray-400 px-6 sm:px-24 py-4"
   >
-    <div class="flex items-center space-x-8">
+    <!-- Left section with logo -->
+    <div class="flex items-center space-x-4 sm:space-x-8">
       <a href="/blogs">
         <img src="assets/logo.svg" alt="logo" class="h-8 w-8" />
       </a>
-      <p href="/blogs" class="text-red-500 text-2xl">Buletin</p>
+      <p href="/blogs" class="text-red-500 text-2xl hidden md:block">Buletin</p>
+    </div>
 
-      <!-- Line divider -->
-      <div class="w-[2px] h-8 bg-gray-400"></div>
-
+    <!-- Navigation Links - Hidden on Mobile, Visible on Desktop -->
+    <div class="flex items-center space-x-8">
       <a
         href="#"
         class="font-medium text-gray-600 hover:font-bold duration-300 transition-all cursor-pointer ease-out"
@@ -27,34 +28,40 @@
         >Bookmark</a
       >
     </div>
-    <div class="flex items-center space-x-8">
+
+    <!-- Write button and user profile for all screens -->
+    <div class="flex items-center space-x-4 sm:space-x-8">
       <button
         (click)="openBlogCreateModal()"
         class="flex items-center space-x-2 hover:text-gray-900 duration-300 transition-all cursor-pointer ease-out"
       >
-        <img src="assets/write.svg" alt="Write Logo" class="w-5 h-5" />
-        <h3 class="font-medium text-gray-700 text-base">Write</h3>
+        <img
+          src="assets/write.svg"
+          alt="Write Logo"
+          class="w-4 h-4 sm:w-5 sm:h-5"
+        />
+        <h3 class="font-medium text-gray-700 text-sm sm:text-base">Write</h3>
       </button>
-      <div class="flex items-center space-x-8">
+
+      <!-- User Profile -->
+      <div class="flex items-center space-x-4">
         <ng-container *ngIf="user; else signInLink">
-          <div class="flex items-center space-x-2">
-            <button
-              (click)="userProfileModal.openModal()"
-              class="border-2 border-gray-600 rounded-full"
-            >
-              <img
-                [src]="user.photoURL || 'assets/blank-profile-picture-png.webp'"
-                alt="User Avatar"
-                class="rounded-full object-cover w-11 h-11"
-              />
-            </button>
-          </div>
+          <button
+            (click)="userProfileModal.openModal()"
+            class="border-2 border-gray-600 rounded-full"
+          >
+            <img
+              [src]="user.photoURL || 'assets/blank-profile-picture-png.webp'"
+              alt="User Avatar"
+              class="rounded-full object-cover w-8 h-8 sm:w-11 sm:h-11"
+            />
+          </button>
           <app-user-profile #userProfileModal [user]="user"></app-user-profile>
         </ng-container>
         <ng-template #signInLink>
           <a
             href="/login"
-            class="font-medium text-base text-gray-600 hover:font-semibold transition-all duration-300 ease-out cursor-pointer"
+            class="font-medium text-sm text-gray-600 hover:font-semibold transition-all duration-300 ease-out cursor-pointer"
           >
             sign-in
           </a>

@@ -30,7 +30,12 @@
             <div class="w-full flex flex-col justify-start">
               <div class="flex items-center space-x-4">
                 <p class="text-xs md:text-sm text-gray-500">
-                  Written by: {{ post.authorDisplayName }}
+                  Written by:
+                  {{
+                    post.authorDisplayName.length > 15
+                      ? (post.authorDisplayName | slice : 0 : 15) + "..."
+                      : post.authorDisplayName
+                  }}
                 </p>
                 <p class="text-xs md:text-sm text-gray-500">
                   {{ post.createdAt | date : "MMM-dd-yyyy" }}
@@ -227,8 +232,12 @@
               alt="Blog Image"
               class="w-full h-40 object-cover rounded-lg mb-4"
             />
-            <h3 class="text-lg font-semibold mb-2">{{ post.title }}</h3>
-            <p class="text-gray-700 mb-4">
+            <h3
+              class="sm:text-base md:text-lg lg:text-xl font-bold my-2 text-black mb-2"
+            >
+              {{ post.title }}
+            </h3>
+            <p class="text-gray-500 text-sm mb-4">
               {{
                 post.content.length > 150
                   ? (post.content | slice : 0 : 150) + "..."
@@ -375,8 +384,8 @@
               <p class="text-xs md:text-sm text-gray-500">
                 Written by:
                 {{
-                  post.authorDisplayName.length > 10
-                    ? (post.authorDisplayName | slice : 0 : 10) + "..."
+                  post.authorDisplayName.length > 15
+                    ? (post.authorDisplayName | slice : 0 : 15) + "..."
                     : post.authorDisplayName
                 }}
               </p>
