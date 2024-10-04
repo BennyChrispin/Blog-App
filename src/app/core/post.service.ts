@@ -18,6 +18,9 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class PostService {
+  deletePost(id: string | undefined) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private firestore: Firestore, private authService: AuthService) {}
 
   // Create a Post with author's information
