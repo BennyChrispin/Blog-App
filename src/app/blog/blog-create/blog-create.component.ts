@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../../core/post.service';
 import { BlogPost } from '../../models/blog-post.model';
-import { AuthService } from '../../core/auth.service'; // Import AuthService to get user details
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-blog-create',

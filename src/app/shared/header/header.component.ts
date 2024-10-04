@@ -3,6 +3,7 @@ import { AuthService } from '../../core/auth.service';
 import { User } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +14,11 @@ export class HeaderComponent implements OnInit {
   user: User | null = null;
   user$: Observable<User | null>;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {
     this.user$ = this.authService.currentUser$;
   }
 
@@ -28,7 +33,8 @@ export class HeaderComponent implements OnInit {
       const userUUID = this.user.uid;
       this.router.navigate(['/blog-create', userUUID]).then(() => {});
     } else {
-      console.error('User is not logged in');
+      // Displaying a toast if the user is not logged in
+      this.toastr.error('You need to login first!', 'Authentication Required');
     }
   }
 }
