@@ -15,8 +15,14 @@ export class BlogListComponent implements OnInit {
   isLoadingTrending = true;
   isLoadingNonTrending = true;
 
-  hasTrendingPosts = true; // New flag
-  hasNonTrendingPosts = true; // New flag
+  hasTrendingPosts = true;
+  hasNonTrendingPosts = true;
+
+  // Boolean values to toggle the state of the buttons
+  isHeartSolid = false;
+  isCommentSolid = false;
+  isBookmarkSolid = false;
+  isPaperPlaneSolid = false;
 
   constructor(private postService: PostService) {}
 
@@ -25,11 +31,9 @@ export class BlogListComponent implements OnInit {
       const trending = posts.filter((post) => post.isTrending);
       const nonTrending = posts.filter((post) => !post.isTrending);
 
-      // Set the flag to false if no trending posts are found
       this.hasTrendingPosts = trending.length > 0;
       this.hasNonTrendingPosts = nonTrending.length > 0;
 
-      // Simulate loading state for trending posts
       setTimeout(() => {
         if (this.hasTrendingPosts) {
           this.trendingPosts$ = new Observable((observer) => {
@@ -39,7 +43,6 @@ export class BlogListComponent implements OnInit {
         this.isLoadingTrending = false;
       }, 1000);
 
-      // Simulate loading state for non-trending posts
       setTimeout(() => {
         if (this.hasNonTrendingPosts) {
           this.nonTrendingPosts$ = new Observable((observer) => {
@@ -49,5 +52,22 @@ export class BlogListComponent implements OnInit {
         this.isLoadingNonTrending = false;
       }, 1000);
     });
+  }
+
+  // Toggle functions for the buttons
+  toggleHeart() {
+    this.isHeartSolid = !this.isHeartSolid;
+  }
+
+  toggleComment() {
+    this.isCommentSolid = !this.isCommentSolid;
+  }
+
+  toggleBookmark() {
+    this.isBookmarkSolid = !this.isBookmarkSolid;
+  }
+
+  togglePaperPlane() {
+    this.isPaperPlaneSolid = !this.isPaperPlaneSolid;
   }
 }
