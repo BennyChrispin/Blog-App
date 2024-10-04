@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PostService } from '../../core/post.service';
 import { BlogPost } from '../../models/blog-post.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog-list',
@@ -11,6 +12,8 @@ import { BlogPost } from '../../models/blog-post.model';
 export class BlogListComponent implements OnInit {
   trendingPosts$: Observable<BlogPost[]> | null = null;
   nonTrendingPosts$: Observable<BlogPost[]> | null = null;
+  @ViewChild('blogModal') blogModal!: BlogListComponent;
+  selectedPost: any;
 
   isLoadingTrending = true;
   isLoadingNonTrending = true;
@@ -24,7 +27,7 @@ export class BlogListComponent implements OnInit {
   isBookmarkSolid = false;
   isPaperPlaneSolid = false;
 
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService, private router: Router) {}
 
   ngOnInit(): void {
     this.postService.getPosts().subscribe((posts) => {
@@ -69,5 +72,9 @@ export class BlogListComponent implements OnInit {
 
   togglePaperPlane() {
     this.isPaperPlaneSolid = !this.isPaperPlaneSolid;
+  }
+
+  openModal(post: any) {
+    this.router.navigate(['/blogs', post.id]);
   }
 }

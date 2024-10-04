@@ -59,6 +59,7 @@
 
               <!-- Button always at the bottom -->
               <button
+                (click)="openModal(post)"
                 class="text-red-500 font-bold hover:underline mt-auto text-xs md:text-sm"
               >
                 Read More
@@ -257,7 +258,10 @@
                   : post.content
               }}
             </p>
-            <button class="text-red-500 font-bold hover:underline">
+            <button
+              (click)="openModal(post)"
+              class="text-red-500 font-bold hover:underline"
+            >
               Read More
             </button>
             <div
