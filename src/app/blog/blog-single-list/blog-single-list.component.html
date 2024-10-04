@@ -2,7 +2,7 @@
   class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-30 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
 >
   <div
-    class="bg-white p-6 sm:p-8 lg:p-10 rounded-3xl max-w-lg w-full relative md:max-w-xl lg:max-w-2xl"
+    class="bg-white p-6 sm:p-8 lg:p-10 rounded-xl max-w-lg w-full relative md:max-w-xl lg:max-w-2xl"
   >
     <ng-container *ngIf="loading; else blogContent">
       <div class="flex items-center justify-center">
@@ -11,13 +11,13 @@
     </ng-container>
 
     <ng-template #blogContent>
-      <div *ngIf="post">
+      <div *ngIf="post" class="mt-2">
         <!-- Blog Image -->
         <img
           *ngIf="post.image"
           [src]="post.image"
           alt="{{ post.title }}"
-          class="w-full h-48 object-cover rounded-t-lg"
+          class="w-full h-56 object-cover rounded-t-xl"
         />
 
         <!-- Title -->
@@ -29,8 +29,23 @@
           <span>{{ post.createdAt | date : "short" }}</span>
         </div>
 
-        <!-- Content -->
-        <p class="mt-2 text-gray-700">{{ post.content }}</p>
+        <!-- Display content based on the expanded state -->
+        <p class="mt-2 text-gray-700">
+          {{
+            isExpanded
+              ? post.content
+              : (post.content | slice : 0 : 200) +
+                (post.content.length > 200 ? "..." : "")
+          }}
+          <!-- Show More / Show Less button -->
+          <button
+            (click)="toggleExpand()"
+            class="text-black font-bold"
+            *ngIf="post.content.length > 200"
+          >
+            {{ isExpanded ? "Less" : "More" }}
+          </button>
+        </p>
 
         <!-- Action Buttons -->
         <div class="flex justify-between mt-4">
@@ -105,7 +120,7 @@
         <!-- Close Button -->
         <button
           (click)="close()"
-          class="absolute top-2 right-4 sm:right-6 mt-2 p-2 border border-gray-600 rounded-full hover:border-2 hover:border-gray-800 hover:text-gray-800 text-gray-600 duration-300 transition-all ease-in"
+          class="absolute top-1 right-1 sm:right-6 mt-2 p-2 border border-gray-600 rounded-full hover:border-2 hover:border-gray-800 hover:text-gray-800 text-gray-600 duration-300 transition-all ease-in"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
