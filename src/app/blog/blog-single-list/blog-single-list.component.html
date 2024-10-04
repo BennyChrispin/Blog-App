@@ -149,3 +149,11 @@
     </ng-template>
   </div>
 </div>
+
+<!-- Modal for BlogSingleList -->
+<div *ngIf="isOpen" class="modal-backdrop">
+  <div class="modal-content">
+    <app-blog-create [post]="post" (closeModal)="close()" #blogCreateComponent>
+    </app-blog-create>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../../core/post.service';
@@ -10,11 +10,13 @@ import { AuthService } from '../../core/auth.service';
   templateUrl: './blog-create.component.html',
   styleUrls: ['./blog-create.component.css'],
 })
-export class BlogCreateComponent {
-  userUUID: string | null = null;
+export class BlogCreateComponent implements OnInit {
+  @Input() post: BlogPost | null = null;
   imagePreview: string | null = null;
   blogForm: FormGroup;
   @Output() closeModal = new EventEmitter<void>();
+
+  isEditMode: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,8 +34,16 @@ export class BlogCreateComponent {
   }
 
   ngOnInit(): void {
-    this.userUUID = this.route.snapshot.paramMap.get('uuid');
-    console.log('BlogCreateComponent initialized with UUID:', this.userUUID);
+    if (this.post) {
+      this.isEditMode = true; // Set to edit mode if a post is provided
+      this.blogForm.patchValue({
+        title: this.post.title,
+        content: this.post.content,
+        image: this.post.image,
+        isTrending: this.post.isTrending,
+      });
+      this.imagePreview = this.post.image;
+    }
   }
 
   updateImagePreview(): void {
@@ -47,43 +57,27 @@ export class BlogCreateComponent {
 
   async onSend() {
     if (this.blogForm.valid) {
-      console.log('Sending blog post', this.blogForm.value);
-
-      // Get the current timestamp
       const createdAt = new Date().toISOString();
-
-      // Get the current user details
       const user = this.authService.getCurrentUser();
 
       if (user) {
-        // Create a blog post object based on the BlogPost interface
         const blogPost: BlogPost = {
-          title: this.blogForm.value.title,
-          content: this.blogForm.value.content,
-          image: this.blogForm.value.image,
-          userUUID: this.userUUID as string,
-          createdAt: createdAt,
-          isBookmarked: false,
-          isTrending: this.blogForm.value.isTrending,
-          likes: [],
-          comments: [],
-          authorUUID: user.uid,
-          authorDisplayName: user.displayName || 'Anonymous',
+          id: this.post ? this.post.id : null,
+          ...this.blogForm.value,
+          authorDisplayName: user.displayName,
+          createdAt: this.post ? this.post.createdAt : createdAt,
         };
 
-        try {
+        if (this.post) {
+          // Update existing post
+          await this.postService.updatePost(blogPost);
+        } else {
+          // Create new post
           await this.postService.createPost(blogPost);
-          console.log('Blog post added successfully!');
-          this.close();
-        } catch (error) {
-          console.error('Error adding blog post: ', error);
         }
-      } else {
-        console.error('User not authenticated.');
+
+        this.close();
       }
-    } else {
-      console.log('Form is invalid');
-      this.blogForm.markAllAsTouched();
     }
   }
 }

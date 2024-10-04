@@ -6,6 +6,7 @@ import { BlogEditComponent } from './blog-edit/blog-edit.component';
 import { CommentSectionComponent } from './comment-section/comment-section.component';
 import { BannerComponent } from './banner/banner.component';
 import { BlogSingleListComponent } from './blog-single-list/blog-single-list.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,6 @@ import { BlogSingleListComponent } from './blog-single-list/blog-single-list.com
     BannerComponent,
     BlogSingleListComponent,
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, SharedModule],
 })
 export class BlogModule {}

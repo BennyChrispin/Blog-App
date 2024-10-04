@@ -61,6 +61,19 @@ export class PostService {
     });
   }
 
+  // Update the updatePost method to only include the fields that are required
+  async updatePost(post: BlogPost): Promise<void> {
+    if (!post.id) {
+      throw new Error('Post ID is required for updating a post.');
+    }
+
+    const postDoc = doc(this.firestore, `posts/${post.id}`);
+
+    // Create an object containing only the properties you want to update
+    const { title, content, image, isTrending } = post;
+    await updateDoc(postDoc, { title, content, image, isTrending });
+  }
+
   // Like a Post
   likePost(postId: string, userUUID: string): Promise<void> {
     const postDoc = doc(this.firestore, `posts/${postId}`);
