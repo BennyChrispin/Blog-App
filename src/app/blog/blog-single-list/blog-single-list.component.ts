@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from '../../core/post.service';
 import { BlogPost } from '../../models/blog-post.model';
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-blog-single-list',
@@ -16,19 +17,22 @@ export class BlogSingleListComponent implements OnInit {
   loading: boolean = false;
   newCommentText: string = '';
   isExpanded: boolean = false;
-
   isHeartSolid = false;
+  currentUserDisplayName: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private postService: PostService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.blogId = params.get('id');
       this.loadBlogDetail(this.blogId);
+      this.currentUserDisplayName =
+        this.authService.getCurrentUser()?.displayName || null;
     });
   }
 
@@ -54,17 +58,20 @@ export class BlogSingleListComponent implements OnInit {
     }
   }
 
-  deletePost() {}
+  deletePost() {
+    if (this.post) {
+      console.log('Deleting post:', this.post.id);
+    }
+  }
 
   likePost() {}
 
   addComment() {}
 
-  // Toggle functions for the buttons
   toggleHeart() {
     this.isHeartSolid = !this.isHeartSolid;
   }
-  // Toggle the expanded state
+
   toggleExpand() {
     this.isExpanded = !this.isExpanded;
   }
