@@ -10,10 +10,12 @@ import {
   arrayRemove,
   getDoc,
   deleteDoc,
+  getDocs,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { BlogPost } from '../models/blog-post.model';
 import { AuthService } from './auth.service';
+import { Comment } from '../models/blog-post.model';
 
 @Injectable({
   providedIn: 'root',
@@ -76,6 +78,37 @@ export class PostService {
   async deletePost(id: string): Promise<void> {
     const postDoc = doc(this.firestore, `posts/${id}`);
     await deleteDoc(postDoc);
+  }
+
+  // Add a comment to a post in the comments sub-collection
+  async addComment(postId: string, content: string): Promise<void> {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      const comment = {
+        content: content,
+        authorUUID: user.uid,
+        authorDisplayName: user.displayName || 'Anonymous',
+        createdAt: new Date(),
+      };
+
+      const commentsCollection = collection(
+        this.firestore,
+        `posts/${postId}/comments`
+      );
+      await addDoc(commentsCollection, comment);
+    }
+  }
+
+  // Retrieve comments for a post
+  async getComments(postId: string): Promise<Comment[]> {
+    const commentsCollection = collection(
+      this.firestore,
+      `posts/${postId}/comments`
+    );
+    const commentsSnapshot = await getDocs(commentsCollection);
+    return commentsSnapshot.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() } as Comment;
+    });
   }
 
   // Like a Post

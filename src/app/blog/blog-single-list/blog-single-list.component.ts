@@ -9,9 +9,12 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from '../../core/post.service';
-import { BlogPost } from '../../models/blog-post.model';
+import { BlogPost, Comment } from '../../models/blog-post.model';
 import { AuthService } from '../../core/auth.service';
 import { BlogCreateComponent } from '../blog-create/blog-create.component';
+import { FormGroup } from '@angular/forms';
+import { formatDistanceToNow } from 'date-fns';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-blog-single-list',
@@ -32,6 +35,8 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   isExpanded: boolean = false;
   isHeartSolid = false;
   currentUserDisplayName: string | null = null;
+  comments: Comment[] = [];
+  commentForm!: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +45,7 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
     private authService: AuthService
   ) {}
 
+  // Make sure to check post before loading comments
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.blogId = params.get('id');
@@ -57,6 +63,12 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
         .then((post) => {
           this.post = post;
           this.loading = false;
+          if (post && post.id) {
+            // Ensure post is not null and has an id
+            this.loadComments(post.id);
+          } else {
+            console.error('Post is null or does not have an ID.');
+          }
         })
         .catch((error) => {
           console.error('Error fetching blog details:', error);
@@ -66,7 +78,6 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // `blogCreateComponent` will now be initialized when modal is open
     if (this.isOpen && this.blogCreateComponent) {
       this.blogCreateComponent.post = this.post;
     }
@@ -78,7 +89,7 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
       if (this.blogCreateComponent) {
         this.blogCreateComponent.post = post;
       }
-    }, 0); // Delay to ensure child component is rendered
+    }, 0);
   }
 
   editPost() {
@@ -91,12 +102,10 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
     this.showConfirmationModal = true;
   }
 
-  // Function to close the confirmation modal
   closeDeleteModal() {
     this.showConfirmationModal = false;
   }
 
-  // Function to handle post deletion when confirmed
   onDeleteConfirm() {
     if (this.post && this.post.id) {
       this.postService
@@ -113,9 +122,56 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  likePost() {}
+  addComment() {
+    if (!this.post) {
+      console.error('Post is undefined.');
+      return;
+    }
 
-  addComment() {}
+    if (!this.newCommentText.trim()) {
+      console.error('Comment text is empty.');
+      return;
+    }
+
+    const postId = this.post.id;
+    if (typeof postId === 'string') {
+      this.postService
+        .addComment(postId, this.newCommentText)
+        .then(() => {
+          this.loadComments(postId);
+          this.newCommentText = '';
+        })
+        .catch((error) => {
+          console.error('Error adding comment:', error);
+        });
+    } else {
+      console.error('Post ID is not a valid string.');
+    }
+  }
+
+  loadComments(postId: string) {
+    this.postService.getComments(postId).then((comments) => {
+      this.comments = comments;
+      console.log('Loaded comments:', comments);
+    });
+  }
+
+  getRelativeTime(timestamp: any): string {
+    if (timestamp instanceof Timestamp) {
+      timestamp = timestamp.toDate();
+    }
+
+    const date = new Date(timestamp);
+
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date:', timestamp);
+      return 'Invalid date';
+    }
+
+    return formatDistanceToNow(date, { addSuffix: true });
+  }
+
+  likePost() {}
 
   toggleHeart() {
     this.isHeartSolid = !this.isHeartSolid;
@@ -128,7 +184,6 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   open(post: BlogPost) {
     this.isOpen = true;
 
-    // Delay the access to allow the component to initialize
     setTimeout(() => {
       if (this.blogCreateComponent) {
         this.blogCreateComponent.post = post;

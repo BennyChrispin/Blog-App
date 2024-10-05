@@ -14,7 +14,10 @@ export interface BlogPost {
 }
 
 export interface Comment {
+  id?: string;
   userUUID: string;
+  authorDisplayName: string;
+  photoURL: string;
   content: string;
-  createdAt: string;
+  createdAt: Date;
 }

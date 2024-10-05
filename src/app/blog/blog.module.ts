@@ -8,6 +8,7 @@ import { BannerComponent } from './banner/banner.component';
 import { BlogSingleListComponent } from './blog-single-list/blog-single-list.component';
 import { SharedModule } from '../shared/shared.module';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,6 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
     BlogSingleListComponent,
     ConfirmationModalComponent,
   ],
-  imports: [CommonModule, SharedModule],
+  imports: [CommonModule, SharedModule, FormsModule],
 })
 export class BlogModule {}
