@@ -62,16 +62,13 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
 
   loadBlogDetail(id: string | null) {
     if (id) {
-      this.loading = true;
       this.postService
         .getPostById(id)
         .then((post) => {
           if (post && post.id) {
             this.post = post;
-            // Initialize the like state for the post
             this.likedPosts[post.id] =
               post.likes?.includes(this.currentUserId || '') || false;
-            this.loading = false;
             this.loadComments(post.id);
           } else {
             console.error('Post is null or does not have an ID.');
@@ -79,7 +76,6 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
         })
         .catch((error) => {
           console.error('Error fetching blog details:', error);
-          this.loading = false;
         });
     }
   }

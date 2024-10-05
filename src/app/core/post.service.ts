@@ -120,7 +120,7 @@ export class PostService {
       'Liked post:',
       postId,
       'Likes updated:',
-      (await getDoc(postDoc)).data()?.['likes'] // Safely access likes with bracket notation
+      (await getDoc(postDoc)).data()?.['likes']
     );
   }
 

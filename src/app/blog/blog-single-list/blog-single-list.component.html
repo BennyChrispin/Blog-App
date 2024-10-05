@@ -4,190 +4,180 @@
   <div
     class="bg-white p-6 sm:p-8 lg:p-10 rounded-xl max-w-lg w-full relative md:max-w-xl lg:max-w-2xl"
   >
-    <ng-container *ngIf="loading; else blogContent">
-      <div class="flex items-center justify-center">
-        <div class="loader"></div>
+    <!-- Render the content directly if the post exists -->
+    <div *ngIf="post" class="mt-3">
+      <!-- Blog Image -->
+      <img
+        *ngIf="post.image"
+        [src]="post.image"
+        alt="{{ post.title }}"
+        class="w-full h-56 object-cover rounded-t-xl"
+      />
+
+      <!-- Title -->
+      <h1 class="text-2xl text-black font-bold mt-4">
+        {{ post.title }}
+      </h1>
+
+      <!-- Author and Date -->
+      <div class="text-gray-500 text-sm flex justify-between mt-2">
+        <span>Written By: {{ post.authorDisplayName }}</span>
+        <span>{{ post.createdAt | date : "short" }}</span>
       </div>
-    </ng-container>
 
-    <ng-template #blogContent>
-      <div *ngIf="post" class="mt-3">
-        <!-- Blog Image -->
-        <img
-          *ngIf="post.image"
-          [src]="post.image"
-          alt="{{ post.title }}"
-          class="w-full h-56 object-cover rounded-t-xl"
-        />
-
-        <!-- Title -->
-        <h1 class="text-2xl text-black font-bold mt-4">
-          {{ post.title }}
-        </h1>
-
-        <!-- Author and Date -->
-        <div class="text-gray-500 text-sm flex justify-between mt-2">
-          <span>Written By: {{ post.authorDisplayName }}</span>
-          <span>{{ post.createdAt | date : "short" }}</span>
-        </div>
-
-        <!-- Display content based on the expanded state -->
-        <p class="mt-2 text-gray-700">
-          {{
-            isExpanded
-              ? post.content
-              : (post.content | slice : 0 : 200) +
-                (post.content.length > 200 ? "..." : "")
-          }}
-          <!-- Show More / Show Less button -->
-          <button
-            (click)="toggleExpand()"
-            class="text-black font-bold"
-            *ngIf="post.content.length > 200"
-          >
-            {{ isExpanded ? "Less" : "More" }}
-          </button>
-        </p>
-
-        <!-- Action Buttons -->
-        <div class="flex justify-between mt-4">
-          <button
-            *ngIf="currentUserDisplayName === post.authorDisplayName"
-            (click)="editPost()"
-            class="text-blue-600 hover:underline hover:font-bold duration-300 transition-all ease-out"
-          >
-            Edit
-          </button>
-          <button
-            *ngIf="currentUserDisplayName === post?.authorDisplayName"
-            (click)="confirmDelete()"
-            class="text-red-600 hover:underline hover:font-bold duration-300 transition-all ease-out"
-          >
-            Delete
-          </button>
-        </div>
-
-        <!-- Like Button -->
-        <div class="flex items-center mt-4">
-          <button
-            (click)="toggleHeart()"
-            class="text-green-600 hover:underline"
-          >
-            <div class="text-gray-500 hover:text-gray-900">
-              <svg
-                *ngIf="!isHeartSolid"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                />
-              </svg>
-              <svg
-                *ngIf="isHeartSolid"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="red"
-                viewBox="0 0 24 24"
-                class="size-6"
-              >
-                <path
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                />
-              </svg>
-            </div>
-          </button>
-          <span class="ml-2 font-bold text-sm">
-            {{ post.likes.length }} Likes
-          </span>
-        </div>
-
-        <!-- Comments Section -->
-        <div class="mt-4">
-          <h3 class="text-lg font-semibold">Comments</h3>
-
-          <!-- Scrollable comments container -->
-          <div
-            class="comments-container overflow-y-auto h-36 pr-2 mt-3 border border-gray-200 rounded-xl"
-          >
-            <ng-container *ngIf="comments.length > 0; else noComments">
-              <div *ngFor="let comment of comments" class="border-b pb-2 mt-2">
-                <div class="flex items-center space-x-3 px-4">
-                  <img
-                    [src]="comment.photoURL"
-                    alt="{{ comment.authorDisplayName }}"
-                    class="w-8 h-8 object-cover rounded-full"
-                  />
-                  <div class="flex flex-col">
-                    <div class="flex items-center space-x-3">
-                      <strong class="font-bold text-sm text-gray-700">
-                        {{ comment.authorDisplayName }}
-                      </strong>
-                      <span class="text-gray-500 text-xs font-normal">
-                        {{ getRelativeTime(comment.createdAt) }}
-                      </span>
-                    </div>
-                    <span class="font-normal text-gray-500 text-sm">
-                      {{ comment.content }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-
-            <!-- Placeholder for no comments -->
-            <ng-template #noComments>
-              <div class="flex items-center justify-center text-gray-500 py-14">
-                No comments yet. Be the first to comment!
-              </div>
-            </ng-template>
-          </div>
-
-          <!-- Comment input section -->
-          <div class="flex flex-col mt-4">
-            <input
-              [(ngModel)]="newCommentText"
-              (keyup.enter)="addComment()"
-              type="text"
-              placeholder="Add a comment..."
-              class="w-full p-3 border border-gray-400 rounded-lg"
-            />
-            <button
-              (click)="addComment()"
-              class="mt-3 hover:underline py-2 px-6 bg-black text-white font-semibold w-1/3"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-
-        <!-- Close Button -->
+      <!-- Display content based on the expanded state -->
+      <p class="mt-2 text-gray-700">
+        {{
+          isExpanded
+            ? post.content
+            : (post.content | slice : 0 : 200) +
+              (post.content.length > 200 ? "..." : "")
+        }}
+        <!-- Show More / Show Less button -->
         <button
-          (click)="close()"
-          class="absolute top-1 right-1 sm:right-6 mt-2 p-2 border border-gray-600 rounded-full hover:border-2 hover:border-gray-800 hover:text-gray-800 text-gray-600 duration-300 transition-all ease-in"
+          (click)="toggleExpand()"
+          class="text-black font-bold"
+          *ngIf="post.content.length > 200"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-4"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M6 18 18 6M6 6l12 12"
-            />
-          </svg>
+          {{ isExpanded ? "Less" : "More" }}
+        </button>
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-between mt-4">
+        <button
+          *ngIf="currentUserDisplayName === post.authorDisplayName"
+          (click)="editPost()"
+          class="text-blue-600 hover:underline hover:font-bold duration-300 transition-all ease-out"
+        >
+          Edit
+        </button>
+        <button
+          *ngIf="currentUserDisplayName === post?.authorDisplayName"
+          (click)="confirmDelete()"
+          class="text-red-600 hover:underline hover:font-bold duration-300 transition-all ease-out"
+        >
+          Delete
         </button>
       </div>
-    </ng-template>
+
+      <!-- Like Button -->
+      <div class="flex items-center mt-4">
+        <button (click)="toggleHeart()" class="text-green-600 hover:underline">
+          <div class="text-gray-500 hover:text-gray-900">
+            <svg
+              *ngIf="isHeartSolid"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+              />
+            </svg>
+            <svg
+              *ngIf="!isHeartSolid"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="red"
+              viewBox="0 0 24 24"
+              class="size-6"
+            >
+              <path
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <span class="ml-2 font-bold text-sm">
+          {{ post.likes.length }} Likes
+        </span>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold">Comments</h3>
+
+        <!-- Scrollable comments container -->
+        <div
+          class="comments-container overflow-y-auto h-36 pr-2 mt-3 border border-gray-200 rounded-xl"
+        >
+          <ng-container *ngIf="comments.length > 0; else noComments">
+            <div *ngFor="let comment of comments" class="border-b pb-2 mt-2">
+              <div class="flex items-center space-x-3 px-4">
+                <img
+                  [src]="comment.photoURL"
+                  alt="{{ comment.authorDisplayName }}"
+                  class="w-8 h-8 object-cover rounded-full"
+                />
+                <div class="flex flex-col">
+                  <div class="flex items-center space-x-3">
+                    <strong class="font-bold text-sm text-gray-700">
+                      {{ comment.authorDisplayName }}
+                    </strong>
+                    <span class="text-gray-500 text-xs font-normal">
+                      {{ getRelativeTime(comment.createdAt) }}
+                    </span>
+                  </div>
+                  <span class="font-normal text-gray-500 text-sm">
+                    {{ comment.content }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Placeholder for no comments -->
+          <ng-template #noComments>
+            <div class="flex items-center justify-center text-gray-500 py-14">
+              No comments yet. Be the first to comment!
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- Comment input section -->
+        <div class="flex flex-col mt-4">
+          <input
+            [(ngModel)]="newCommentText"
+            (keyup.enter)="addComment()"
+            type="text"
+            placeholder="Add a comment..."
+            class="w-full p-3 border border-gray-400 rounded-lg"
+          />
+          <button
+            (click)="addComment()"
+            class="mt-3 hover:underline py-2 px-6 bg-black text-white font-semibold w-1/3"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <button
+        (click)="close()"
+        class="absolute top-1 right-1 sm:right-6 mt-2 p-2 border border-gray-600 rounded-full hover:border-2 hover:border-gray-800 hover:text-gray-800 text-gray-600 duration-300 transition-all ease-in"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18 18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
   </div>
 </div>
 
