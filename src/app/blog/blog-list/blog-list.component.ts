@@ -58,10 +58,6 @@ export class BlogListComponent implements OnInit {
   }
 
   // Toggle functions for the buttons
-  toggleHeart() {
-    this.isHeartSolid = !this.isHeartSolid;
-  }
-
   toggleComment() {
     this.isCommentSolid = !this.isCommentSolid;
   }
