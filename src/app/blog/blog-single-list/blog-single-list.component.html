@@ -108,33 +108,35 @@
         <!-- Comments Section -->
         <div class="mt-4">
           <h3 class="text-lg font-semibold">Comments</h3>
-          <div *ngFor="let comment of comments" class="border-b pb-2 mt-2">
-            <div class="flex items-center space-x-3">
-              <img
-                [src]="comment.photoURL"
-                alt="{{ comment.authorDisplayName }}"
-                class="w-8 h-8 object-cover rounded-full"
-              />
-              <div class="flex flex-col">
-                <div class="flex items-center space-x-2">
-                  <strong
-                    class="font-bold text-sm text-gray-700 flex items-start text-start"
-                    >{{ comment.authorDisplayName }}</strong
-                  >
-                  <span class="text-gray-500 text-sm">
-                    {{ getRelativeTime(comment.createdAt) }}
+
+          <!-- Scrollable comments container -->
+          <div class="comments-container overflow-y-auto h-48 pr-2 mt-2">
+            <div *ngFor="let comment of comments" class="border-b pb-2 mt-2">
+              <div class="flex items-center space-x-3">
+                <img
+                  [src]="comment.photoURL"
+                  alt="{{ comment.authorDisplayName }}"
+                  class="w-8 h-8 object-cover rounded-full"
+                />
+                <div class="flex flex-col">
+                  <div class="flex items-center space-x-3">
+                    <strong class="font-bold text-sm text-gray-700">
+                      {{ comment.authorDisplayName }}
+                    </strong>
+                    <span class="text-gray-500 text-xs font-normal">
+                      {{ getRelativeTime(comment.createdAt) }}
+                    </span>
+                  </div>
+
+                  <span class="font-normal text-gray-500 text-sm">
+                    {{ comment.content }}
                   </span>
                 </div>
-
-                <span
-                  class="font-normal text-gray-500 text-sm flex items-start text-start"
-                >
-                  {{ comment.content }}
-                </span>
               </div>
             </div>
           </div>
 
+          <!-- Comment input section -->
           <div class="mt-4 flex flex-col">
             <input
               [(ngModel)]="newCommentText"
