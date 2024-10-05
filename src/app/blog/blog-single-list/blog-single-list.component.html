@@ -110,34 +110,44 @@
           <h3 class="text-lg font-semibold">Comments</h3>
 
           <!-- Scrollable comments container -->
-          <div class="comments-container overflow-y-auto h-48 pr-2 mt-2">
-            <div *ngFor="let comment of comments" class="border-b pb-2 mt-2">
-              <div class="flex items-center space-x-3">
-                <img
-                  [src]="comment.photoURL"
-                  alt="{{ comment.authorDisplayName }}"
-                  class="w-8 h-8 object-cover rounded-full"
-                />
-                <div class="flex flex-col">
-                  <div class="flex items-center space-x-3">
-                    <strong class="font-bold text-sm text-gray-700">
-                      {{ comment.authorDisplayName }}
-                    </strong>
-                    <span class="text-gray-500 text-xs font-normal">
-                      {{ getRelativeTime(comment.createdAt) }}
+          <div
+            class="comments-container overflow-y-auto h-36 pr-2 mt-3 border border-gray-200 rounded-lg"
+          >
+            <ng-container *ngIf="comments.length > 0; else noComments">
+              <div *ngFor="let comment of comments" class="border-b pb-2 mt-2">
+                <div class="flex items-center space-x-3">
+                  <img
+                    [src]="comment.photoURL"
+                    alt="{{ comment.authorDisplayName }}"
+                    class="w-8 h-8 object-cover rounded-full"
+                  />
+                  <div class="flex flex-col">
+                    <div class="flex items-center space-x-3">
+                      <strong class="font-bold text-sm text-gray-700">
+                        {{ comment.authorDisplayName }}
+                      </strong>
+                      <span class="text-gray-500 text-xs font-normal">
+                        {{ getRelativeTime(comment.createdAt) }}
+                      </span>
+                    </div>
+                    <span class="font-normal text-gray-500 text-sm">
+                      {{ comment.content }}
                     </span>
                   </div>
-
-                  <span class="font-normal text-gray-500 text-sm">
-                    {{ comment.content }}
-                  </span>
                 </div>
               </div>
-            </div>
+            </ng-container>
+
+            <!-- Placeholder for no comments -->
+            <ng-template #noComments>
+              <div class="flex items-center justify-center text-gray-500 py-16">
+                No comments yet. Be the first to comment!
+              </div>
+            </ng-template>
           </div>
 
           <!-- Comment input section -->
-          <div class="mt-4 flex flex-col">
+          <div class="flex flex-col mt-4">
             <input
               [(ngModel)]="newCommentText"
               (keyup.enter)="addComment()"

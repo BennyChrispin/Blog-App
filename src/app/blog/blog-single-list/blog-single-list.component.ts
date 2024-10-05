@@ -64,7 +64,6 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
           this.post = post;
           this.loading = false;
           if (post && post.id) {
-            // Ensure post is not null and has an id
             this.loadComments(post.id);
           } else {
             console.error('Post is null or does not have an ID.');
