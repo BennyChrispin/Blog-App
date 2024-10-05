@@ -35,7 +35,7 @@ export class BlogCreateComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.post) {
-      this.isEditMode = true; // Set to edit mode if a post is provided
+      this.isEditMode = true;
       this.blogForm.patchValue({
         title: this.post.title,
         content: this.post.content,

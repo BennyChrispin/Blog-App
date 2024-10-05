@@ -15,6 +15,7 @@ import { BlogCreateComponent } from '../blog-create/blog-create.component';
 import { FormGroup } from '@angular/forms';
 import { formatDistanceToNow } from 'date-fns';
 import { Timestamp } from 'firebase/firestore';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-blog-single-list',
@@ -46,7 +47,8 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private postService: PostService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService
   ) {}
 
   // Make sure to check post before loading comments
@@ -126,6 +128,12 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   }
 
   addComment() {
+    if (!this.currentUserId) {
+      // Displaying a toast if the user is not logged in
+      this.toastr.error('You need to login first!', 'Authentication Required');
+      return;
+    }
+
     if (!this.post) {
       console.error('Post is undefined.');
       return;
@@ -174,6 +182,11 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   }
 
   async likePost(postId: string): Promise<void> {
+    if (!this.currentUserId) {
+      // Displaying a toast if the user is not logged in
+      this.toastr.error('You need to login first!', 'Authentication Required');
+      return;
+    }
     if (!this.currentUserId || !this.likedPosts.hasOwnProperty(postId)) return;
 
     try {
