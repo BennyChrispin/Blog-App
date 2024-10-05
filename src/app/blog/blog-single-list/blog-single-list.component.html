@@ -111,11 +111,11 @@
 
           <!-- Scrollable comments container -->
           <div
-            class="comments-container overflow-y-auto h-36 pr-2 mt-3 border border-gray-200 rounded-lg"
+            class="comments-container overflow-y-auto h-36 pr-2 mt-3 border border-gray-200 rounded-xl"
           >
             <ng-container *ngIf="comments.length > 0; else noComments">
               <div *ngFor="let comment of comments" class="border-b pb-2 mt-2">
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-3 px-4">
                   <img
                     [src]="comment.photoURL"
                     alt="{{ comment.authorDisplayName }}"
@@ -140,7 +140,7 @@
 
             <!-- Placeholder for no comments -->
             <ng-template #noComments>
-              <div class="flex items-center justify-center text-gray-500 py-16">
+              <div class="flex items-center justify-center text-gray-500 py-14">
                 No comments yet. Be the first to comment!
               </div>
             </ng-template>
