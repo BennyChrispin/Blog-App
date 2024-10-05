@@ -28,6 +28,9 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   blogCreateComponent!: BlogCreateComponent;
   showConfirmationModal = false;
 
+  // A map to track like state for each post by ID
+  likedPosts: { [key: string]: boolean } = {};
+
   isOpen = false;
   blogId: string | null = null;
   loading: boolean = false;
@@ -35,6 +38,7 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   isExpanded: boolean = false;
   isHeartSolid = false;
   currentUserDisplayName: string | null = null;
+  currentUserId: string | null = null;
   comments: Comment[] = [];
   commentForm!: FormGroup;
 
@@ -53,6 +57,7 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
       this.currentUserDisplayName =
         this.authService.getCurrentUser()?.displayName || null;
     });
+    this.currentUserId = this.authService.getCurrentUser()?.uid || null;
   }
 
   loadBlogDetail(id: string | null) {
@@ -61,9 +66,12 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
       this.postService
         .getPostById(id)
         .then((post) => {
-          this.post = post;
-          this.loading = false;
           if (post && post.id) {
+            this.post = post;
+            // Initialize the like state for the post
+            this.likedPosts[post.id] =
+              post.likes?.includes(this.currentUserId || '') || false;
+            this.loading = false;
             this.loadComments(post.id);
           } else {
             console.error('Post is null or does not have an ID.');
@@ -151,7 +159,6 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
   loadComments(postId: string) {
     this.postService.getComments(postId).then((comments) => {
       this.comments = comments;
-      console.log('Loaded comments:', comments);
     });
   }
 
@@ -170,10 +177,37 @@ export class BlogSingleListComponent implements OnInit, AfterViewInit {
     return formatDistanceToNow(date, { addSuffix: true });
   }
 
-  likePost() {}
+  async likePost(postId: string): Promise<void> {
+    if (!this.currentUserId || !this.likedPosts.hasOwnProperty(postId)) return;
+
+    try {
+      if (this.likedPosts[postId]) {
+        // Unlike the post
+        await this.postService.unlikePost(postId, this.currentUserId);
+        console.log('Unlike post', postId);
+      } else {
+        // Like the post
+        await this.postService.likePost(postId, this.currentUserId);
+        console.log('Like post', postId);
+      }
+
+      // Update the local like state
+      this.likedPosts[postId] = !this.likedPosts[postId];
+
+      // Reload the post to get the latest like count
+      this.loadBlogDetail(postId);
+    } catch (error) {
+      console.error('Error updating like status:', error);
+    }
+  }
 
   toggleHeart() {
-    this.isHeartSolid = !this.isHeartSolid;
+    if (this.post?.id) {
+      this.isHeartSolid = !this.isHeartSolid;
+      this.likePost(this.post.id);
+    } else {
+      console.error('Post ID is undefined');
+    }
   }
 
   toggleExpand() {

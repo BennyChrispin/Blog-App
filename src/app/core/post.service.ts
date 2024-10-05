@@ -110,20 +110,26 @@ export class PostService {
       return { id: doc.id, ...doc.data() } as Comment;
     });
   }
-
-  // Like a Post
-  likePost(postId: string, userUUID: string): Promise<void> {
+  // Like Post
+  async likePost(postId: string, userUUID: string): Promise<void> {
     const postDoc = doc(this.firestore, `posts/${postId}`);
-    return updateDoc(postDoc, {
+    await updateDoc(postDoc, {
       likes: arrayUnion(userUUID),
     });
+    console.log(
+      'Liked post:',
+      postId,
+      'Likes updated:',
+      (await getDoc(postDoc)).data()?.['likes'] // Safely access likes with bracket notation
+    );
   }
 
-  // Unlike a Post
-  unlikePost(postId: string, userUUID: string): Promise<void> {
+  // unLike Post
+  async unlikePost(postId: string, userUUID: string): Promise<void> {
     const postDoc = doc(this.firestore, `posts/${postId}`);
-    return updateDoc(postDoc, {
+    await updateDoc(postDoc, {
       likes: arrayRemove(userUUID),
     });
+    console.log('Unliked post:', postId, 'by user:', userUUID);
   }
 }
