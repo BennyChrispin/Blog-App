@@ -1,3 +1,76 @@
-<div class="bg-gray-500 p-8">
-  <h2 class="text-white">Footer Phrase</h2>
-</div>
+<footer class="bg-slate-800 text-white py-10">
+  <div class="max-w-6xl mx-auto">
+    <div
+      class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8"
+    >
+      <div class="mb-8 md:mb-0">
+        <img src="../../../assets/logo.svg" alt="Logo" class="h-16 mb-2" />
+        <!-- Replace with your logo -->
+        <h2 class="text-2xl font-bold">Buletin</h2>
+        <p class="text-sm mt-2">Delivering quality since 2024.</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-8 mb-8 md:mb-0">
+        <div>
+          <h3 class="font-semibold text-lg mb-2">About Us</h3>
+          <p class="text-sm">
+            We strive to bring you the latest insights and trends in the
+            blogging world, providing valuable content that informs and inspires
+            our readers.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Quick Links</h3>
+          <nav>
+            <a href="#" class="block text-sm hover:underline">Blogs</a>
+            <a href="#" class="block text-sm hover:underline">Stories</a>
+            <a href="#" class="block text-sm hover:underline">Creation</a>
+            <a href="#" class="block text-sm hover:underline">Write</a>
+            <a href="#" class="block text-sm hover:underline">Profile</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="mb-8 md:mb-0">
+        <h3 class="font-semibold text-lg mb-2">Subscribe to Our Newsletter</h3>
+        <form class="flex">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            class="p-2 rounded-l-md border border-white text-black placeholder-gray-500"
+            required
+          />
+          <button
+            type="submit"
+            class="bg-slate-300 text-slate-800 p-2 rounded-r-md hover:bg-red-400 transition duration-300 ease-in hover:text-white"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
+
+      <div>
+        <h3 class="font-semibold text-lg mb-2">Contact Us</h3>
+
+        <p class="text-sm flex items-center justify-center space-x-2">
+          <span>Email</span>
+          <a
+            href="mailto:contact@yourcompany.com"
+            class="hover:underline text-xs"
+            >Buletin23 gmail.com</a
+          >
+        </p>
+        <p class="text-sm flex items-center justify-center space-x-2">
+          <span>Phone:</span>
+          <a href="tel:1234567890" class="hover:underline text-xs"
+            >(250) 456-7890</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <div class="text-center text-gray-400 mt-8">
+      <p>&copy; 2024 Buletin. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

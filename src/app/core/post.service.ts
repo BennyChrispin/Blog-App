@@ -14,7 +14,6 @@ import {
   query,
   where,
   QuerySnapshot,
-  DocumentSnapshot,
   QueryDocumentSnapshot,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
