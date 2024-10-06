@@ -1,78 +1,145 @@
-<div class="fixed top-0 w-full mx-auto">
-  <div
-    class="flex justify-between items-center bg-white border-gray-400 px-6 sm:px-24 py-4"
-  >
+<div
+  class="fixed top-0 w-full mx-auto bg-white z-50"
+  [ngClass]="{ 'shadow-md': isScrolled }"
+>
+  <div class="flex justify-between items-center px-4 sm:px-8 py-4">
     <!-- Left section with logo -->
-    <div class="flex items-center space-x-4 sm:space-x-8">
+    <div class="flex items-center space-x-4">
       <a href="/blogs" class="cursor-pointer">
         <img src="assets/logo.svg" alt="logo" class="h-8 w-8" />
       </a>
-      <p
-        href="/blogs"
-        class="text-red-500 text-2xl hidden md:block cursor-pointer"
-      >
+      <!-- Show the brand name on larger screens only -->
+      <p class="hidden md:block text-red-500 text-2xl cursor-pointer">
         Buletin
       </p>
     </div>
 
-    <!-- Navigation Links -->
-    <div class="flex items-center space-x-8">
+    <!-- Navigation Links (Hidden on small screens, shown on larger screens) -->
+    <div class="hidden md:flex items-center space-x-6">
       <a
         href="/blogs"
-        class="font-medium text-gray-600 hover:font-bold duration-300 transition-all cursor-pointer ease-out"
+        class="font-medium text-gray-600 hover:text-black transition-all duration-300 cursor-pointer"
         >Stories</a
       >
       <a
         href="/blogs"
-        class="font-medium text-gray-600 hover:font-bold duration-300 transition-all cursor-pointer ease-out"
+        class="font-medium text-gray-600 hover:text-black transition-all duration-300 cursor-pointer"
         >Creator</a
       >
       <a
         href="/blogs/bookmarked"
-        class="font-medium text-gray-600 hover:font-bold duration-300 transition-all cursor-pointer ease-out"
+        class="font-medium text-gray-600 hover:text-black transition-all duration-300 cursor-pointer"
+        >Bookmark</a
       >
-        Bookmark
-      </a>
     </div>
 
-    <!-- Write button and user profile for all screens -->
-    <div class="flex items-center space-x-4 sm:space-x-8">
+    <!-- Right section: Write button and profile for larger screens -->
+    <div class="hidden md:flex items-center space-x-6">
       <button
         (click)="openBlogCreateModal()"
-        class="flex items-center space-x-2 hover:text-gray-900 duration-300 transition-all cursor-pointer ease-out"
+        class="flex items-center space-x-2 hover:text-gray-900 transition-all duration-300 cursor-pointer"
       >
-        <img
-          src="assets/write.svg"
-          alt="Write Logo"
-          class="w-4 h-4 sm:w-5 sm:h-5"
-        />
+        <img src="assets/write.svg" alt="Write" class="w-4 h-4 sm:w-5 sm:h-5" />
         <h3 class="font-medium text-gray-700 text-sm sm:text-base">Write</h3>
       </button>
 
-      <!-- User Profile -->
-      <div class="flex items-center space-x-4">
-        <ng-container *ngIf="user; else signInLink">
-          <button
-            (click)="userProfileModal.openModal()"
-            class="border-2 border-gray-600 rounded-full"
-          >
-            <img
-              [src]="user.photoURL || 'assets/blank-profile-picture-png.webp'"
-              alt="User Avatar"
-              class="rounded-full object-cover w-8 h-8 sm:w-11 sm:h-11"
-            />
-          </button>
-          <app-user-profile #userProfileModal [user]="user"></app-user-profile>
-        </ng-container>
-        <ng-template #signInLink>
-          <a
-            href="/login"
-            class="font-medium text-sm text-gray-600 hover:font-semibold transition-all duration-300 ease-out cursor-pointer"
-          >
-            sign-in
-          </a>
-        </ng-template>
-      </div>
+      <!-- User Profile (Hidden on small screens, visible on large screens) -->
+      <ng-container *ngIf="user; else signInLink">
+        <button
+          (click)="userProfileModal.openModal()"
+          class="border-2 border-gray-600 rounded-full"
+        >
+          <img
+            [src]="user.photoURL || 'assets/blank-profile-picture-png.webp'"
+            alt="User Avatar"
+            class="rounded-full object-cover w-8 h-8 sm:w-10 sm:h-10"
+          />
+        </button>
+        <app-user-profile #userProfileModal [user]="user"></app-user-profile>
+      </ng-container>
+      <ng-template #signInLink>
+        <a
+          href="/login"
+          class="font-medium text-sm text-gray-600 hover:font-semibold transition-all duration-300 ease-out cursor-pointer"
+        >
+          Sign In
+        </a>
+      </ng-template>
     </div>
+
+    <!-- Hamburger Menu for mobile and small screens -->
+    <div class="md:hidden flex items-center space-x-2">
+      <button
+        (click)="toggleMenu()"
+        class="flex items-center space-x-2 hover:text-gray-900 transition-all duration-300 cursor-pointer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16m-7 6h7"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu: Toggle visibility on smaller screens -->
+  <!-- Mobile Menu: Toggle visibility on smaller screens -->
+  <div
+    *ngIf="isMenuOpen"
+    class="flex flex-col items-center justify-center bg-white py-4 md:hidden space-y-4"
+  >
+    <a
+      href="/blogs"
+      class="font-medium text-gray-600 hover:text-black transition-all duration-300"
+      >Stories</a
+    >
+    <a
+      href="/blogs"
+      class="font-medium text-gray-600 hover:text-black transition-all duration-300"
+      >Creator</a
+    >
+    <a
+      href="/blogs/bookmarked"
+      class="font-medium text-gray-600 hover:text-black transition-all duration-300"
+      >Bookmark</a
+    >
+    <button
+      (click)="openBlogCreateModal()"
+      class="flex items-center space-x-2 hover:text-gray-900 transition-all duration-300"
+    >
+      <img src="assets/write.svg" alt="Write" class="w-4 h-4" />
+      <h3 class="font-medium text-gray-700 text-sm">Write</h3>
+    </button>
+
+    <ng-container *ngIf="user; else signInLinkMobile">
+      <button
+        (click)="userProfileModal.openModal()"
+        class="border-2 border-gray-600 rounded-full"
+      >
+        <img
+          [src]="user.photoURL || 'assets/blank-profile-picture-png.webp'"
+          alt="User Avatar"
+          class="rounded-full object-cover w-8 h-8"
+        />
+      </button>
+    </ng-container>
+
+    <ng-template #signInLinkMobile>
+      <a
+        href="/login"
+        class="font-medium text-sm text-gray-600 hover:text-black transition-all duration-300"
+      >
+        Sign In
+      </a>
+    </ng-template>
   </div>
 </div>

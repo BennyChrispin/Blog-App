@@ -12,7 +12,7 @@ npm install
 
 ## Live Demo
 
-[https://blog-app-omega-five-97.vercel.app/]
+[https://blog-1e3cd.web.app]
 
 ## **Table of Contents**
 
