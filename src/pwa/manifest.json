@@ -1,20 +1,29 @@
 {
-  "name": "Blog Platform",
-  "short_name": "Blog Web",
-  "start_url": "/",
+  "name": "My Blog App",
+  "short_name": "Blog",
+  "theme_color": "#10141E",
+  "background_color": "#FFFFFF",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "scope": "/",
+  "start_url": "/?source=pwa",
   "icons": [
     {
-      "src": "assets/logo.svg",
+      "src": "assets/icons/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/svg"
+      "type": "image/png"
     },
     {
       "src": "assets/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
     }
-  ]
+  ],
+  "description": "A platform to create, edit, and bookmark blog posts.",
+  "lang": "en",
+  "orientation": "portrait"
 }
