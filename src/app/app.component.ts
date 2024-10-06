@@ -20,10 +20,11 @@ export class AppComponent {
   }
 
   isBlogRoute(): boolean {
-    return (
+    const result =
       this.router.url.startsWith('/blogs') ||
       this.router.url.startsWith('/blog-create') ||
-      this.router.url === '/profile'
-    );
+      this.router.url.startsWith('/blogs/bookmarked') ||
+      this.router.url === '/profile';
+    return result;
   }
 }

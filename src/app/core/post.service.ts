@@ -11,6 +11,11 @@ import {
   getDoc,
   deleteDoc,
   getDocs,
+  query,
+  where,
+  QuerySnapshot,
+  DocumentSnapshot,
+  QueryDocumentSnapshot,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { BlogPost } from '../models/blog-post.model';
@@ -21,18 +26,30 @@ import { Comment } from '../models/blog-post.model';
   providedIn: 'root',
 })
 export class PostService {
+  getTrendingPosts(): Observable<BlogPost[]> | null {
+    throw new Error('Method not implemented.');
+  }
   constructor(private firestore: Firestore, private authService: AuthService) {}
 
-  // Create a Post with author's information
+  // Modify your method to subscribe to currentUser$
   async createPost(post: BlogPost): Promise<void> {
-    const user = this.authService.getCurrentUser();
-    if (user) {
-      post.authorUUID = user.uid;
-      post.authorDisplayName = user.displayName || 'Anonymous';
-    }
+    this.authService.currentUser$.subscribe((user) => {
+      if (user) {
+        post.authorUUID = user.uid;
+        post.authorDisplayName = user.displayName || 'Anonymous';
 
-    const postCollection = collection(this.firestore, 'posts');
-    await addDoc(postCollection, post);
+        const postCollection = collection(this.firestore, 'posts');
+        addDoc(postCollection, post)
+          .then(() => {
+            console.log('Post created successfully!');
+          })
+          .catch((error) => {
+            console.error('Error creating post:', error);
+          });
+      } else {
+        console.error('No user logged in');
+      }
+    });
   }
 
   // Get all Posts
@@ -110,6 +127,67 @@ export class PostService {
       return { id: doc.id, ...doc.data() } as Comment;
     });
   }
+
+  // Add bookmark (store postId)
+  async addBookmark(postId: string): Promise<void> {
+    const bookmarkCollection = collection(this.firestore, 'bookmarks');
+    await addDoc(bookmarkCollection, {
+      postId,
+      createdAt: new Date(),
+    });
+    console.log(`Bookmarked post with ID: ${postId}`);
+  }
+
+  // Remove bookmark by postId
+  async removeBookmark(postId: string): Promise<void> {
+    const bookmarkCollection = collection(this.firestore, 'bookmarks');
+    const bookmarkQuery = query(
+      bookmarkCollection,
+      where('postId', '==', postId)
+    );
+
+    const querySnapshot = await getDocs(bookmarkQuery);
+    querySnapshot.forEach(async (docSnapshot) => {
+      const docRef = doc(this.firestore, `bookmarks/${docSnapshot.id}`);
+      await deleteDoc(docRef);
+      console.log(`Unbookmarked post with ID: ${postId}`);
+    });
+  }
+
+  // Fetches bookmarked post IDs for a user
+  getUserBookmarks(userId: string): Promise<string[]> {
+    const bookmarkCollection = collection(
+      this.firestore,
+      `users/${userId}/bookmarks`
+    );
+    return getDocs(bookmarkCollection)
+      .then((snapshot: QuerySnapshot) => {
+        const bookmarks: string[] = [];
+        snapshot.forEach((doc: QueryDocumentSnapshot) => {
+          bookmarks.push(doc.id);
+        });
+        return bookmarks;
+      })
+      .catch((error: any) => {
+        console.error('Error fetching bookmarks:', error);
+        return [];
+      });
+  }
+
+  // Get multiple posts by their IDs
+  async getPostsByIds(postIds: string[]): Promise<BlogPost[]> {
+    const posts: BlogPost[] = [];
+
+    for (const postId of postIds) {
+      const post = await this.getPostById(postId);
+      if (post) {
+        posts.push(post);
+      }
+    }
+
+    return posts;
+  }
+
   // Like Post
   async likePost(postId: string, userUUID: string): Promise<void> {
     const postDoc = doc(this.firestore, `posts/${postId}`);

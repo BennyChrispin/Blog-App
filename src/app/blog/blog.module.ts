@@ -6,6 +6,7 @@ import { BlogSingleListComponent } from './blog-single-list/blog-single-list.com
 import { SharedModule } from '../shared/shared.module';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { FormsModule } from '@angular/forms';
+import { BlogBookmarkedListComponent } from './blog-bookmarked-list/blog-bookmarked-list.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
     BannerComponent,
     BlogSingleListComponent,
     ConfirmationModalComponent,
+    BlogBookmarkedListComponent,
   ],
   imports: [CommonModule, SharedModule, FormsModule],
 })

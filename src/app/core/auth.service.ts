@@ -25,16 +25,21 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn() {
-    throw new Error('Method not implemented.');
-  }
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
+
+  getCurrentUserAsync(): Observable<User | null> {
+    return this.currentUser$;
+  }
 
   constructor(@Inject(Auth) private auth: Auth, private router: Router) {
     // Listen for authentication state changes
     this.auth.onAuthStateChanged((user) => {
-      this.currentUserSubject.next(user);
+      if (user) {
+        this.currentUserSubject.next(user);
+      } else {
+        this.currentUserSubject.next(null);
+      }
     });
   }
 

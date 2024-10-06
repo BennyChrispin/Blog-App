@@ -20,6 +20,7 @@ import { AuthEffects } from '../store/auth/auth.effects';
 import { authReducer } from '../store/auth/auth.reducer';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { SharedModule } from './shared/shared.module';
+import { bookmarkReducer } from '../store/blog/blog.reducer';
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,7 +45,7 @@ import { SharedModule } from './shared/shared.module';
       timeOut: 3000,
     }),
     EffectsModule.forRoot([AuthEffects]),
-    StoreModule.forRoot({ auth: authReducer }),
+    StoreModule.forRoot({ auth: authReducer, bookmarks: bookmarkReducer }),
     AngularFireAuthModule,
   ],
   providers: [provideClientHydration(), appConfig.providers],

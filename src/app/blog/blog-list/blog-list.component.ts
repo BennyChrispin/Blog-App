@@ -3,6 +3,18 @@ import { Observable } from 'rxjs';
 import { PostService } from '../../core/post.service';
 import { BlogPost } from '../../models/blog-post.model';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/auth.service';
+import { UserWithBookmarks } from '../../../store/auth/UserWithBookmarks';
+import {
+  Firestore,
+  arrayRemove,
+  arrayUnion,
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-blog-list',
@@ -27,7 +39,12 @@ export class BlogListComponent implements OnInit {
   isBookmarkSolid = false;
   isPaperPlaneSolid = false;
 
-  constructor(private postService: PostService, private router: Router) {}
+  constructor(
+    private postService: PostService,
+    private router: Router,
+    private authService: AuthService,
+    private firestore: Firestore
+  ) {}
 
   ngOnInit(): void {
     this.postService.getPosts().subscribe((posts) => {
@@ -58,12 +75,82 @@ export class BlogListComponent implements OnInit {
   }
 
   // Toggle functions for the buttons
+  toggleHeart() {
+    this.isHeartSolid = !this.isHeartSolid;
+  }
+
   toggleComment() {
     this.isCommentSolid = !this.isCommentSolid;
   }
 
-  toggleBookmark() {
-    this.isBookmarkSolid = !this.isBookmarkSolid;
+  async toggleBookmark(post: BlogPost) {
+    const user = this.authService.getCurrentUser();
+
+    if (!user) {
+      console.log('User must be signed in to bookmark posts');
+      return;
+    }
+
+    const userDocRef = doc(this.firestore, `users/${user.uid}`);
+    const userDoc = await getDoc(userDocRef);
+
+    // If user document does not exist, create it with an empty bookmarks array
+    if (!userDoc.exists()) {
+      await setDoc(userDocRef, { bookmarks: [] });
+    }
+
+    if (post.id && this.isPostBookmarked(post.id)) {
+      // Proceed if post.id is defined and the post is bookmarked
+      await this.unbookmarkPost(post.id!, user.uid);
+      post.isBookmarked = false;
+      this.isBookmarkSolid = false;
+      console.log(`Unbookmarked post by user UUID: ${user.uid}`);
+    } else if (post.id) {
+      // Proceed if post.id is defined and the post is not bookmarked
+      await this.bookmarkPost(post.id!, user.uid);
+      post.isBookmarked = true;
+      this.isBookmarkSolid = true;
+      console.log(`Bookmarked post by user UUID: ${user.uid}`);
+    }
+  }
+
+  async bookmarkPost(postId: string, userId: string) {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    try {
+      // Add the postId to the bookmarks array and include the user ID
+      await updateDoc(userDocRef, {
+        bookmarks: arrayUnion(postId),
+      });
+      console.log(
+        `Post with ID: ${postId} bookmarked successfully by user UUID: ${userId}`
+      );
+    } catch (error) {
+      console.error('Error bookmarking post: ', error);
+    }
+  }
+
+  async unbookmarkPost(postId: string, userId: string) {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    try {
+      // Remove the postId from the bookmarks array
+      await updateDoc(userDocRef, {
+        bookmarks: arrayRemove(postId),
+      });
+      console.log(
+        `Post with ID: ${postId} unbookmarked by user UUID: ${userId}`
+      );
+    } catch (error) {
+      console.error('Error unbookmarking post: ', error);
+    }
+  }
+
+  // Check if the post is bookmarked
+  isPostBookmarked(postId: string): boolean {
+    const user = this.authService.getCurrentUser() as UserWithBookmarks | null;
+    if (user?.bookmarks) {
+      return user.bookmarks.includes(postId);
+    }
+    return false;
   }
 
   togglePaperPlane() {

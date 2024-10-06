@@ -1,7 +1,7 @@
-import { User } from 'firebase/auth';
+import { UserWithBookmarks } from './UserWithBookmarks';
 
 export interface AuthState {
-  user: User | null;
+  user: UserWithBookmarks | null;
   error: string | null;
 }
 

@@ -7,10 +7,10 @@ import {
   registerSuccess,
   loginSuccess,
 } from './auth.actions';
-import { User } from 'firebase/auth';
+import { UserWithBookmarks } from './UserWithBookmarks';
 
 export interface AuthState {
-  user: User | null;
+  user: UserWithBookmarks | null;
   error: string | null;
 }
 
@@ -33,9 +33,4 @@ export const authReducer = createReducer(
     console.log('Login Success in Reducer:', user);
     return { ...state, user, error: null };
   })
-  // on(loginSuccess, (state, { user }) => ({
-  //   ...state,
-  //   user: user, // Update user in the state
-  //   error: null,
-  // })),
 );

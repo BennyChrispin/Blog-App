@@ -1,0 +1,10 @@
+<div *ngIf="bookmarkedPosts.length > 0; else noBookmarks">
+  <div *ngFor="let post of bookmarkedPosts">
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.content }}</p>
+  </div>
+</div>
+
+<ng-template #noBookmarks>
+  <p>No bookmarked posts available.</p>
+</ng-template>
